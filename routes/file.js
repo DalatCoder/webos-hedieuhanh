@@ -50,4 +50,46 @@ router.get('/', async (req, res) => {
   }
 });
 
+// @route   POST /file?path=/mnt/c&filename=test.txt
+// @desc    Create new file named test.txt in /mnt/c
+// @access  Public
+router.post('/', async (req, res) => {
+  const { path: pathName, filename } = req.query;
+  if (!pathName || pathName === '' || !filename || filename === '') {
+    return res.status(400).json({
+      error: 'Invalid path',
+      data: null,
+    });
+  }
+
+  const filePath = path.join(pathName, filename);
+  if (fs.existsSync(filePath)) {
+    return res.status(400).json({
+      error: 'File already exists',
+      data: null,
+    });
+  }
+
+  try {
+    await fs.promises.writeFile(filePath, '', 'utf-8');
+    res.json({
+      error: null,
+      data: filePath,
+    });
+  } catch (err) {
+    if (err.errno === -2 && err.code === 'ENOENT') {
+      return res.status(400).json({
+        error: 'Directory does not exist',
+        data: null,
+      });
+    }
+
+    console.error(err);
+    return res.status(500).json({
+      error: 'Sorry! Something went wrong!',
+      data: null,
+    });
+  }
+});
+
 module.exports = router;
