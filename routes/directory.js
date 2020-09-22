@@ -57,7 +57,7 @@ router.get('/', async (req, res) => {
 });
 
 // @route   POST /directory?path=/mnt/c&name=new-folder
-// @desc    Create new folder name new-folder inside /mnt/c
+// @desc    Create new folder named new-folder inside /mnt/c
 // @access  Public
 router.post('/', async (req, res) => {
   const { path: pathName, name } = req.query;
@@ -82,6 +82,42 @@ router.post('/', async (req, res) => {
     res.json({
       error: null,
       data: folderPath,
+    });
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({
+      error: 'Sorry! Something went wrong!',
+      data: null,
+    });
+  }
+});
+
+// @route   DELETE /directory?path=/mnt/c&name=new-folder
+// @desc    Delete a folder named new-folder inside /mnt/c
+// @access  Public
+router.delete('/', async (req, res) => {
+  const { path: pathName, name } = req.query;
+  if (!path || path === '' || !name || name === '') {
+    return res.status(400).json({
+      error: 'Invalid path',
+      data: null,
+    });
+  }
+
+  const folderPath = path.join(pathName, name);
+  const isFolderExists = fs.existsSync(folderPath);
+  if (!isFolderExists) {
+    return res.status(400).json({
+      error: 'Folder does not exists',
+      data: null,
+    });
+  }
+
+  try {
+    await fs.promises.rmdir(folderPath);
+    res.json({
+      error: null,
+      data: null,
     });
   } catch (err) {
     console.error(err);
