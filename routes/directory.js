@@ -92,6 +92,51 @@ router.post('/', async (req, res) => {
   }
 });
 
+// @route   PUT /directory?path=/mnt/c&oldname=old-folder&newname=new-folder
+// @desc    Rename folder "old-folder" to "new-folder" in /mnt/c
+// @access  Public
+router.put('/', async (req, res) => {
+  const { path: pathName, oldname, newname } = req.query;
+  if (
+    !path ||
+    path === '' ||
+    !oldname ||
+    oldname === '' ||
+    !newname ||
+    newname === ''
+  ) {
+    return res.status(400).json({
+      error: 'Invalid arguments',
+      data: null,
+    });
+  }
+
+  const folderPath = path.join(pathName, oldname);
+  const isFolderExists = fs.existsSync(folderPath);
+  if (!isFolderExists) {
+    return res.status(400).json({
+      error: 'Folder does not exists',
+      data: null,
+    });
+  }
+
+  const newFolderPath = path.join(pathName, newname);
+
+  try {
+    await fs.promises.rename(folderPath, newFolderPath);
+    res.json({
+      error: null,
+      data: newFolderPath,
+    });
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({
+      error: 'Sorry! Something went wrong!',
+      data: null,
+    });
+  }
+});
+
 // @route   DELETE /directory?path=/mnt/c&name=new-folder
 // @desc    Delete a folder named new-folder inside /mnt/c
 // @access  Public
