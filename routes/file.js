@@ -94,6 +94,55 @@ router.post('/', async (req, res) => {
   }
 });
 
+// @route   PUT /file?path=/mnt/c&filename=test.txt&content=abcxyz
+// @desc    Update content inside file named test.txt in /mnt/c
+// @access  Public
+router.put('/', async (req, res) => {
+  const { path: pathName, filename, content } = req.query;
+  if (
+    !pathName ||
+    pathName === '' ||
+    !filename ||
+    filename === '' ||
+    !content ||
+    content === ''
+  ) {
+    return res.status(400).json({
+      error: 'Invalid arguments',
+      data: null,
+    });
+  }
+
+  const filePath = path.join(pathName, filename);
+  if (!fs.existsSync(filePath)) {
+    return res.status(400).json({
+      error: 'File does not exist',
+      data: null,
+    });
+  }
+
+  try {
+    await fs.promises.writeFile(filePath, content, 'utf-8');
+    res.json({
+      error: null,
+      data: content,
+    });
+  } catch (err) {
+    if (err.errno === -2 && err.code === 'ENOENT') {
+      return res.status(400).json({
+        error: 'Directory does not exist',
+        data: null,
+      });
+    }
+
+    console.error(err);
+    return res.status(500).json({
+      error: 'Sorry! Something went wrong!',
+      data: null,
+    });
+  }
+});
+
 // @route   DELETE /file?path=/mnt/c&filename=test.txt
 // @desc    Delete a file named test.txt in /mnt/c
 // @access  Public
