@@ -1,26 +1,33 @@
-const express = require('express');
-const cors = require('cors');
+process.on('uncaughtException', (err) => {
+  console.error(err);
+  console.log('UNCAUGHT REJECTION! 💥 Shutting down...');
 
-const app = express();
-
-app.use(express.json());
-app.use(express.urlencoded({ extended: true }));
-
-// Implement CORS | Allow everyone for consume API
-app.use(cors());
-
-// Implement CORS for complex request (PUT PATCH DELETE)
-app.options('*', cors());
-
-app.get('/', (req, res) => {
-  res.send('Hello World');
+  // exit 0 when everything is OK
+  // exit 1 when there is exception
+  process.exit(1);
 });
 
-app.use('/api/directory', require('./routes/directory'));
-app.use('/api/file', require('./routes/file'));
-
+const app = require('./app');
 const port = process.env.PORT || 3000;
 
-app.listen(port, () => {
+const server = app.listen(port, () => {
   console.log(`Server is running on port: ${port}`);
+});
+
+process.on('unhandledRejection', (err) => {
+  console.error(err);
+  console.log('UNHANDLED REJECTION! 💥 Shutting down...');
+  server.close(() => {
+    // exit 0 when everything is OK
+    // exit 1 when there is exception
+    process.exit(1);
+  });
+});
+
+// Handle sigterm event from heroku
+process.on('SIGTERM', () => {
+  console.log('👋 SIGTERM RECEIVED. Shutting down gracefully');
+  server.close(() => {
+    console.log('💥 Process terminated!');
+  });
 });
