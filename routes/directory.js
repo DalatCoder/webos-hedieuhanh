@@ -12,10 +12,12 @@ router.get('/', async (req, res) => {
 
   if (!path || path === '') {
     return res.status(400).json({
-      error: 'Invalid path',
+      error: 'Invalid query argument',
       data: null,
     });
   }
+
+  const regex = RegExp('.(.txt|.md)$');
 
   try {
     const dir = await fs.promises.opendir(path);
@@ -26,6 +28,17 @@ router.get('/', async (req, res) => {
       object.name = dirent.name;
       object.isFile = dirent.isFile();
       object.isDirectory = dirent.isDirectory();
+
+      const attributes = {
+        renameable: true,
+        editable: false,
+      };
+
+      if (regex.test(dirent.name)) {
+        attributes.editable = true;
+      }
+
+      object.attributes = attributes;
       directories.push(object);
     }
 
@@ -63,7 +76,7 @@ router.post('/', async (req, res) => {
   const { path: pathName, name } = req.query;
   if (!path || path === '' || !name || name === '') {
     return res.status(400).json({
-      error: 'Invalid path',
+      error: 'Invalid query argument',
       data: null,
     });
   }
@@ -106,7 +119,7 @@ router.put('/', async (req, res) => {
     newname === ''
   ) {
     return res.status(400).json({
-      error: 'Invalid arguments',
+      error: 'Invalid query argument',
       data: null,
     });
   }
@@ -144,7 +157,7 @@ router.delete('/', async (req, res) => {
   const { path: pathName, name } = req.query;
   if (!path || path === '' || !name || name === '') {
     return res.status(400).json({
-      error: 'Invalid path',
+      error: 'Invalid query argument',
       data: null,
     });
   }
