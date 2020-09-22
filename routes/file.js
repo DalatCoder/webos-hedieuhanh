@@ -50,7 +50,7 @@ router.get('/', async (req, res) => {
   }
 });
 
-// @route   POST /file?path=/mnt/c&filename=test.txt
+// @route   POST /file?path=/mnt/c&filename=test.txt&content
 // @desc    Create new file named test.txt in /mnt/c
 // @access  Public
 router.post('/', async (req, res) => {
@@ -62,6 +62,8 @@ router.post('/', async (req, res) => {
     });
   }
 
+  const content = req.query.content || '';
+
   const filePath = path.join(pathName, filename);
   if (fs.existsSync(filePath)) {
     return res.status(400).json({
@@ -71,7 +73,7 @@ router.post('/', async (req, res) => {
   }
 
   try {
-    await fs.promises.writeFile(filePath, '', 'utf-8');
+    await fs.promises.writeFile(filePath, content, 'utf-8');
     res.json({
       error: null,
       data: filePath,
@@ -118,6 +120,51 @@ router.delete('/', async (req, res) => {
     res.json({
       error: null,
       data: null,
+    });
+  } catch (err) {
+    console.error(err);
+    return res.status(500).json({
+      error: 'Sorry! Something went wrong!',
+      data: null,
+    });
+  }
+});
+
+// @route   PUT /file/rename?path=/mnt/c&oldname=oldname.txt&newname=new-name.txt
+// @desc    Rename a file named oldename.txt to newname.txt in /mnt/c
+// @access  Public
+router.put('/rename', async (req, res) => {
+  const { path: pathName, oldname, newname } = req.query;
+  if (
+    !pathName ||
+    pathName === '' ||
+    !oldname ||
+    oldname === '' ||
+    !newname ||
+    newname === ''
+  ) {
+    return res.status(400).json({
+      error: 'Invalid arguments',
+      data: null,
+    });
+  }
+
+  const filePath = path.join(pathName, oldname);
+  if (!fs.existsSync(filePath)) {
+    return res.status(400).json({
+      error: 'File does not exist',
+      data: null,
+    });
+  }
+
+  const newFilePath = path.join(pathName, newname);
+
+  try {
+    await fs.promises.rename(filePath, newFilePath);
+
+    res.json({
+      error: null,
+      data: newFilePath,
     });
   } catch (err) {
     console.error(err);
