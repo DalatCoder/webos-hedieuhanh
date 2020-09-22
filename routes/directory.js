@@ -36,6 +36,17 @@ router.get('/', async (req, res) => {
       },
     });
   } catch (err) {
+    if (
+      err.errno === -2 &&
+      err.code === 'ENOENT' &&
+      err.syscall === 'opendir'
+    ) {
+      return res.status(400).json({
+        error: 'Directory does not exist',
+        data: null,
+      });
+    }
+
     console.error(err);
     res.status(400).json({
       error: 'Sorry! Something went wrong!',
