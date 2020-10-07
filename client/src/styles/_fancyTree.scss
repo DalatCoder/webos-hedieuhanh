@@ -1,0 +1,10 @@
+ul.fancytree-container {
+  border: none !important;
+  height: 87vh;
+  max-height: 87vh;
+  overflow: scroll;
+
+  &:focus {
+    outline: none !important;
+  }
+}

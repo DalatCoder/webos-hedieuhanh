@@ -1,0 +1,17 @@
+#table {
+  height: 87vh;
+  max-height: 87vh;
+  overflow: scroll;
+
+  .fa-folder,
+  [class*='file'] {
+    font-size: 20px;
+    color: #333;
+    margin-right: 5px;
+  }
+
+  th,
+  td {
+    user-select: none;
+  }
+}
