@@ -1,5 +1,6 @@
 const express = require('express');
 const cors = require('cors');
+const path = require('path');
 
 const app = express();
 
@@ -12,8 +13,10 @@ app.use(cors());
 // Implement CORS for complex request (PUT PATCH DELETE)
 app.options('*', cors());
 
+app.use(express.static(path.join(__dirname, 'client', 'dist')));
+
 app.get('/', (req, res) => {
-  res.send('Hello World');
+  res.send(path.join(__dirname, 'client', 'dist', 'index.html'));
 });
 
 app.use('/api/directory', require('./routes/directory'));
