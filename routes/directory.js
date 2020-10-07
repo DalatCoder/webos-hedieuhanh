@@ -61,6 +61,7 @@ router.get('/', async (req, res) => {
     obj.isFolder = stats.isDirectory();
     obj.folder = stats.isDirectory(); // For client API
     obj.path = path;
+    obj.modifiedAt = stats.mtime;
 
     const attributes = {
       renameable: true,
