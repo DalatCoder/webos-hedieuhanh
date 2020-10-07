@@ -5,7 +5,10 @@
   "main": "index.js",
   "scripts": {
     "start": "node server.js",
-    "start:dev": "nodemon server.js"
+    "server": "nodemon server.js",
+    "client": "npm start --prefix client",
+    "dev": "concurrently \"npm run server\" \"npm run client\"",
+    "heroku-postbuild": "NPM_CONFIG_PRODUCTION=false npm install --prefix client && npm run build --prefix client"
   },
   "repository": {
     "type": "git",
@@ -20,9 +23,11 @@
   "homepage": "https://github.com/DalatCoder/webos-hedieuhanh#readme",
   "dependencies": {
     "cors": "^2.8.5",
-    "express": "^4.17.1"
+    "express": "^4.17.1",
+    "uuid": "^8.3.1"
   },
   "devDependencies": {
-    "nodemon": "^2.0.4"
+    "nodemon": "^2.0.4",
+    "concurrently": "^5.3.0"
   }
 }

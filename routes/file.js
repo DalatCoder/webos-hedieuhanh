@@ -18,6 +18,7 @@ router.get('/', async (req, res) => {
   }
 
   const supportedFiles = ['.txt', '.md'];
+
   const isSupport = supportedFiles.some((ext) => filename.includes(ext));
   if (!isSupport) {
     return res.status(400).json({

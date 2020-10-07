@@ -1,0 +1,51 @@
+* {
+margin: 0;
+padding: 0;
+box-sizing: border-box;}
+
+.folder {
+  width: 100px;
+  display: flex;
+  flex-direction: column;
+  border: none;
+  border-radius: 10px;
+  justify-content: center;
+  align-items: center;
+  transition: all 300ms ease;
+  cursor: pointer;
+}
+
+.folder:hover {
+  background-color: rgba(0, 0, 0, .1);
+}
+
+.folder.click {
+  color: white;
+  background-color: rgba(0, 0, 0, .5) !important;
+}
+
+.folder.click .folder-icon {
+  color: white;
+}
+
+.folder-icon {
+  font-size: 80px;
+  height: 80px;
+  color: rosybrown;
+  line-height: 0;
+}
+
+.folder-name {
+  font-size: 17px;
+  text-align: center;
+}
+.folder-icon {
+  font-size: 80px;
+  color: rosybrown;
+  line-height: 0;
+}
+
+.folder-name {
+  font-size: 17px;
+  text-align: center;
+}

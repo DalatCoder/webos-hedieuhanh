@@ -1,8 +1,22 @@
 const express = require('express');
 const fs = require('fs');
-const path = require('path');
+const PATH = require('path');
+const uuid = require('uuid');
 
 const router = express.Router();
+
+function safeReadDirSync(path) {
+  let dirData = [];
+  try {
+    dirData = fs.readdirSync(path);
+  } catch (ex) {
+    if (ex.code == 'EACCES' || ex.code == 'EPERM') {
+      //User does not have permissions, ignore directory
+      return null;
+    } else throw ex;
+  }
+  return dirData;
+}
 
 // @route   GET /directory?path=/mnt/c
 // @desc    Get all files and folders in /mnt/c
@@ -17,56 +31,61 @@ router.get('/', async (req, res) => {
     });
   }
 
-  const regex = RegExp('.(.txt|.md)$');
+  const directories = [];
+  const regex = RegExp('.txt$');
+  let dirData = [];
 
   try {
-    const dir = await fs.promises.opendir(path);
-    const directories = [];
-
-    for await (const dirent of dir) {
-      const object = {};
-      object.name = dirent.name;
-      object.isFile = dirent.isFile();
-      object.isDirectory = dirent.isDirectory();
-
-      const attributes = {
-        renameable: true,
-        editable: false,
-      };
-
-      if (regex.test(dirent.name)) {
-        attributes.editable = true;
-      }
-
-      object.attributes = attributes;
-      directories.push(object);
-    }
-
-    res.json({
-      error: null,
-      data: {
-        currentPath: path,
-        directories,
-      },
-    });
-  } catch (err) {
-    if (
-      err.errno === -2 &&
-      err.code === 'ENOENT' &&
-      err.syscall === 'opendir'
-    ) {
-      return res.status(400).json({
-        error: 'Directory does not exist',
-        data: null,
-      });
-    }
-
-    console.error(err);
-    res.status(400).json({
-      error: 'Sorry! Something went wrong!',
+    dirData = safeReadDirSync(path);
+  } catch (ex) {
+    console.error(ex);
+    return res.status(400).json({
+      error: 'Directory does not exist',
       data: null,
     });
   }
+
+  for (const dir of dirData) {
+    let stats;
+    try {
+      stats = fs.statSync(`${path}/${dir}`);
+    } catch (ex) {
+      continue;
+    }
+
+    const obj = {};
+    obj.id = uuid.v4();
+    obj.name = dir;
+    obj.title = dir; // For client API
+    obj.isFile = stats.isFile();
+    obj.isFolder = stats.isDirectory();
+    obj.folder = stats.isDirectory(); // For client API
+    obj.path = path;
+
+    const attributes = {
+      renameable: true,
+      editable: false,
+    };
+
+    if (stats.isFile()) {
+      if (regex.test(dir)) {
+        attributes.editable = true;
+      }
+
+      obj.size = stats.size;
+
+      const ext = PATH.extname(PATH.join(path, dir)).toLowerCase();
+      obj.extension = ext;
+    }
+
+    obj.attributes = attributes;
+    directories.push(obj);
+  }
+
+  res.json({
+    error: null,
+    data: directories,
+  });
 });
 
 // @route   POST /directory?path=/mnt/c&name=new-folder
