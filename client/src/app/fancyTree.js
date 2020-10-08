@@ -25,6 +25,7 @@ async function fetchData(url, callback) {
     render();
     if (callback) callback(directories);
   } catch (err) {
+    console.log(err);
     alert(`Something went wrong: ${err}`);
   }
 }
