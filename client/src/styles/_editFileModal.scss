@@ -1,0 +1,10 @@
+.edit-file {
+  & > :first-child {
+    width: 720px;
+    max-width: 90%;
+    background-color: #fff;
+    padding: 20px;
+    border-radius: 10px;
+    border: none;
+  }
+}

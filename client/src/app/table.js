@@ -34,7 +34,6 @@ export default function renderTable(elementID, directoriesObject) {
   }
 
   state.directories = source;
-  console.log(state.currentPath);
 
   const table = document.createElement('table');
   table.classList.add('table');
@@ -134,7 +133,7 @@ async function handleTableRowDoubleClick(item) {
       return;
     }
 
-    url = `${url}/file?path=${item.path}&filename=${item.name}`;
+    alert('Render file edit');
   }
 
   const raw = await fetch(url);
@@ -142,8 +141,6 @@ async function handleTableRowDoubleClick(item) {
   const { data: directories, path } = res;
 
   state.directories = directories;
-
-  console.log('double', state.currentPath);
 
   const dirObj = {
     directories,

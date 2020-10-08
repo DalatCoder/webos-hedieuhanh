@@ -17,7 +17,7 @@ async function fetchData(url, callback) {
     const raw = await fetch(url);
     const res = await raw.json();
     const { data: directories, path } = res;
-    console.log(directories, path);
+    // console.log(directories, path);
     renderTable('table', { directories, path });
 
     if (state.length === 0) state = directories;
