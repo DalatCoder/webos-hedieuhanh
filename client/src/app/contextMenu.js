@@ -1,3 +1,4 @@
+import renderNewFileModal from './newFileModal';
 import renderNewFolderModal from './newFolderModal';
 import attachContextMenuIcon from './utils/attachContextMenuIcon';
 
@@ -7,6 +8,10 @@ function handleItemSelected(itemName, itemObj, currentPath, callback) {
   switch (action) {
     case 'new folder':
       renderNewFolderModal(currentPath, callback);
+      break;
+
+    case 'new file':
+      renderNewFileModal(currentPath, callback);
       break;
 
     default:

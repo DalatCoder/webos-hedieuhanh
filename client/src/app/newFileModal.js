@@ -1,14 +1,22 @@
-async function handleFormSubmit(currentPath, folderName, closeModal, callback) {
+async function handleFormSubmit(
+  currentPath,
+  fileName,
+  fileContent,
+  closeModal,
+  callback,
+) {
   const requestOptions = {
     method: 'POST',
     redirect: 'follow',
   };
 
-  const url = `http://localhost:4000/api/directory?path=${currentPath}&name=${folderName}`;
+  const url = `http://localhost:4000/api/file?path=${currentPath}&filename=${fileName}&content=${fileContent}`;
 
   try {
     const raw = await fetch(url, requestOptions);
     const res = await raw.json();
+
+    console.log(res);
 
     if (!res.data) callback(res.error, null);
     else callback(null, res.data);
@@ -20,19 +28,28 @@ async function handleFormSubmit(currentPath, folderName, closeModal, callback) {
   }
 }
 
-export default function renderNewFolderModal(currentPath, callback) {
-  const modal = document.getElementById('new-folder');
+export default function renderNewFileModal(currentPath, callback) {
+  const modal = document.getElementById('new-file');
   const form = document.createElement('form');
   const formGroup = document.createElement('div');
+  formGroup.classList.add('form-group');
 
   formGroup.innerHTML = `
     <input
       type="text"
-      id="folder-name"
-      placeholder="Folder name"
+      id="file-name"
+      placeholder="File name with its extension"
       class="form-control"
       autocomplete="off"
     />
+
+    <small class="text-muted d-block mt-3">Put some content or leave it alone!</small>
+    <textarea
+      id="file-content"
+      class="form-control"
+      rows="7"
+    >
+    </textarea>
 
     <input
       type="submit"
@@ -46,15 +63,18 @@ export default function renderNewFolderModal(currentPath, callback) {
 
   form.addEventListener('submit', (e) => {
     e.preventDefault();
-    const newFolderName = form.querySelector('input').value;
-    if (newFolderName.trim().length === 0) {
-      alert('Invalid folder name!');
+    const newFileName = form.querySelector('input').value;
+    const fileContent = form.querySelector('textarea').value;
+
+    if (newFileName.trim().length === 0) {
+      alert('Invalid file name!');
       return;
     }
 
     handleFormSubmit(
       currentPath,
-      newFolderName,
+      newFileName,
+      fileContent,
       function closeModal() {
         modal.hidden = true;
       },
