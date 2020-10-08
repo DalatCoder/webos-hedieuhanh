@@ -2,6 +2,7 @@ const express = require('express');
 const fs = require('fs');
 const PATH = require('path');
 const uuid = require('uuid');
+const rimraf = require('rimraf');
 
 const router = express.Router();
 
@@ -194,8 +195,9 @@ router.delete('/', async (req, res) => {
   }
 
   try {
-    await fs.promises.rmdir(folderPath);
-    res.json({
+    // rm -rf folder
+    rimraf.sync(folderPath);
+    res.status(200).json({
       error: null,
       data: null,
     });
