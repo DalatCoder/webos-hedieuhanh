@@ -2,6 +2,7 @@ import renderNewFileModal from './newFileModal';
 import renderNewFolderModal from './newFolderModal';
 import renderDeleteModal from './deleteModal';
 import attachContextMenuIcon from './utils/attachContextMenuIcon';
+import renderRenameModal from './renameModal';
 
 function handleItemSelected(itemName, itemObj, currentPath, callback) {
   const action = itemName.toLowerCase();
@@ -13,6 +14,10 @@ function handleItemSelected(itemName, itemObj, currentPath, callback) {
 
     case 'new file':
       renderNewFileModal(currentPath, callback);
+      break;
+
+    case 'rename':
+      renderRenameModal(itemObj, currentPath, callback);
       break;
 
     case 'delete':
