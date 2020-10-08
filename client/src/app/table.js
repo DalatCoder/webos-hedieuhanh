@@ -3,12 +3,113 @@
 import shortenString from './utils/shortenString';
 import attachFileIcon from './utils/attachFileIcon';
 import renderContextMenu from './contextMenu';
+import renderEditFileModal from './editFileModal';
 
-let state = {
+const state = {
   selectedItem: {},
   directories: [],
   currentPath: '',
 };
+
+function handleTableRowClick(item) {
+  state.selectedItem = item;
+
+  for (let i = 0; i < state.directories.length; i += 1) {
+    const dir = state.directories[i];
+    if (dir.id === item.id) dir.selected = !dir.selected;
+    else dir.selected = false;
+  }
+
+  const dirObj = {
+    directories: state.directories,
+    path: state.currentPath,
+  };
+
+  renderTable('table', dirObj);
+}
+
+async function handleTableRowDoubleClick(item) {
+  const newPath = `${item.path}/${item.name}`;
+  let url = 'http://localhost:4000/api';
+
+  if (item.isFolder) {
+    url = `${url}/directory?path=${newPath}`;
+  } else {
+    const arr = item.name.split('.');
+    const ext = arr[arr.length - 1];
+    if (ext !== 'txt') {
+      alert('File does not support to view or edit!');
+      return;
+    }
+
+    renderEditFileModal(item, state.currentPath, async (err, data) => {
+      if (err) {
+        console.log(err);
+        alert(err);
+      } else {
+        const raw = await fetch(
+          `http://localhost:4000/api/directory?path=${state.currentPath}`,
+        );
+        const res = await raw.json();
+
+        state.directories = res.data;
+        state.currentPath = res.path;
+
+        const dirObj = {
+          directories: res.data,
+          path: res.path,
+        };
+
+        renderTable('table', dirObj);
+      }
+    });
+
+    return;
+  }
+
+  const raw = await fetch(url);
+  const res = await raw.json();
+  const { data: directories, path } = res;
+
+  state.directories = directories;
+
+  const dirObj = {
+    directories,
+    path,
+  };
+
+  renderTable('table', dirObj);
+
+  state.currentPath = path;
+}
+
+function handleContextMenuOpen(item) {
+  renderContextMenu(
+    'detail-panel',
+    item,
+    state.currentPath,
+    async (err, data) => {
+      if (err) {
+        alert(err);
+      } else {
+        const raw = await fetch(
+          `http://localhost:4000/api/directory?path=${state.currentPath}`,
+        );
+        const res = await raw.json();
+
+        state.directories = res.data;
+        state.currentPath = res.path;
+
+        const dirObj = {
+          directories: res.data,
+          path: res.path,
+        };
+
+        renderTable('table', dirObj);
+      }
+    },
+  );
+}
 
 export default function renderTable(elementID, directoriesObject) {
   const tableRoot = document.getElementById(elementID);
@@ -56,7 +157,9 @@ export default function renderTable(elementID, directoriesObject) {
 
   const tbody = document.createElement('tbody');
 
-  for (const dir of state.directories) {
+  for (let i = 0; i < state.directories.length; i += 1) {
+    const dir = state.directories[i];
+
     const tr = document.createElement('tr');
     if (dir.selected) {
       tr.classList.add('selected');
@@ -77,7 +180,7 @@ export default function renderTable(elementID, directoriesObject) {
           ${new Date(dir.modifiedAt).toLocaleTimeString()}
         </td>
         <td>${dir.isFolder ? 'Folder' : 'File'}</td>
-        <td>${dir.size ? dir.size + ' B' : ''}</td>
+        <td>${dir.size ? `${dir.size} B` : ''}</td>
     `;
 
     tr.innerHTML = html;
@@ -101,81 +204,4 @@ export default function renderTable(elementID, directoriesObject) {
     if (selectedItem) handleContextMenuOpen(selectedItem);
     else handleContextMenuOpen(null);
   });
-}
-
-function handleTableRowClick(item) {
-  state.selectedItem = item;
-
-  for (const dir of state.directories) {
-    if (dir.id === item.id) dir.selected = !dir.selected;
-    else dir.selected = false;
-  }
-
-  const dirObj = {
-    directories: state.directories,
-    path: state.currentPath,
-  };
-
-  renderTable('table', dirObj);
-}
-
-async function handleTableRowDoubleClick(item) {
-  const newPath = `${item.path}/${item.name}`;
-  let url = 'http://localhost:4000/api';
-
-  if (item.isFolder) {
-    url = `${url}/directory?path=${newPath}`;
-  } else {
-    const arr = item.name.split('.');
-    const ext = arr[arr.length - 1];
-    if (ext !== 'txt') {
-      alert('File does not support to view or edit!');
-      return;
-    }
-
-    alert('Render file edit');
-  }
-
-  const raw = await fetch(url);
-  const res = await raw.json();
-  const { data: directories, path } = res;
-
-  state.directories = directories;
-
-  const dirObj = {
-    directories,
-    path,
-  };
-
-  renderTable('table', dirObj);
-
-  state.currentPath = path;
-}
-
-function handleContextMenuOpen(item) {
-  renderContextMenu(
-    'detail-panel',
-    item,
-    state.currentPath,
-    async (err, data) => {
-      if (err) {
-        alert(err);
-      } else {
-        const raw = await fetch(
-          `http://localhost:4000/api/directory?path=${state.currentPath}`,
-        );
-        const res = await raw.json();
-
-        state.directories = res.data;
-        state.currentPath = res.path;
-
-        const dirObj = {
-          directories: res.data,
-          path: res.path,
-        };
-
-        renderTable('table', dirObj);
-      }
-    },
-  );
 }

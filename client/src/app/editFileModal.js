@@ -87,7 +87,6 @@ export default function renderEditFileModal(item, currentPath, callback) {
 
   form.addEventListener('submit', (e) => {
     e.preventDefault();
-    console.log('submit form');
     const fileContent = form.querySelector('textarea').value;
 
     handleSubmitButton(
