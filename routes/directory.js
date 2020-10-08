@@ -45,6 +45,8 @@ router.get('/', async (req, res) => {
     });
   }
 
+  if (!dirData) dirData = [];
+
   for (const dir of dirData) {
     let stats;
     try {
