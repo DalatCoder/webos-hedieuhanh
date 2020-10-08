@@ -138,5 +138,22 @@ async function handleTableRowDoubleClick(item) {
 }
 
 function handleContextMenuOpen(item) {
-  renderContextMenu('detail-panel', item, state.currentPath);
+  renderContextMenu(
+    'detail-panel',
+    item,
+    state.currentPath,
+    async (err, data) => {
+      if (err) {
+        alert(err);
+      } else {
+        const raw = await fetch(
+          `http://localhost:4000/api/directory?path=${state.currentPath}`,
+        );
+        const res = await raw.json();
+        state.directories = res.data;
+
+        renderTable('table', state.directories);
+      }
+    },
+  );
 }

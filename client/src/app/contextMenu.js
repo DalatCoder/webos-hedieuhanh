@@ -1,4 +1,19 @@
+import renderNewFolderModal from './newFolderModal';
 import attachContextMenuIcon from './utils/attachContextMenuIcon';
+
+function handleItemSelected(itemName, itemObj, currentPath, callback) {
+  const action = itemName.toLowerCase();
+
+  switch (action) {
+    case 'new folder':
+      renderNewFolderModal(currentPath, callback);
+      break;
+
+    default:
+      alert('Invalid action!');
+      break;
+  }
+}
 
 export default function renderContextMenu(
   menuElementID,
@@ -31,6 +46,13 @@ export default function renderContextMenu(
         </li>    
     `;
 
+    li.addEventListener('click', () => {
+      contextMenu.hidden = true;
+
+      if (item !== 'Close')
+        handleItemSelected(item, source, currentPath, callback);
+    });
+
     li.innerHTML = html;
     ul.appendChild(li);
   }
@@ -48,6 +70,4 @@ export default function renderContextMenu(
   contextMenu.innerHTML = '';
   contextMenu.appendChild(ul);
   contextMenu.hidden = false;
-
-  if (callback) callback();
 }
