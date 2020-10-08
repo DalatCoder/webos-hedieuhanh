@@ -96,14 +96,14 @@ router.get('/', async (req, res) => {
 // @access  Public
 router.post('/', async (req, res) => {
   const { path: pathName, name } = req.query;
-  if (!path || path === '' || !name || name === '') {
+  if (!pathName || pathName === '' || !name || name === '') {
     return res.status(400).json({
       error: 'Invalid query argument',
       data: null,
     });
   }
 
-  const folderPath = path.join(pathName, name);
+  const folderPath = PATH.join(pathName, name);
   const isFolderExists = fs.existsSync(folderPath);
   if (isFolderExists) {
     return res.status(400).json({
@@ -133,8 +133,8 @@ router.post('/', async (req, res) => {
 router.put('/', async (req, res) => {
   const { path: pathName, oldname, newname } = req.query;
   if (
-    !path ||
-    path === '' ||
+    !pathName ||
+    pathName === '' ||
     !oldname ||
     oldname === '' ||
     !newname ||
@@ -146,7 +146,7 @@ router.put('/', async (req, res) => {
     });
   }
 
-  const folderPath = path.join(pathName, oldname);
+  const folderPath = PATH.join(pathName, oldname);
   const isFolderExists = fs.existsSync(folderPath);
   if (!isFolderExists) {
     return res.status(400).json({
@@ -155,7 +155,7 @@ router.put('/', async (req, res) => {
     });
   }
 
-  const newFolderPath = path.join(pathName, newname);
+  const newFolderPath = PATH.join(pathName, newname);
 
   try {
     await fs.promises.rename(folderPath, newFolderPath);
@@ -177,14 +177,14 @@ router.put('/', async (req, res) => {
 // @access  Public
 router.delete('/', async (req, res) => {
   const { path: pathName, name } = req.query;
-  if (!path || path === '' || !name || name === '') {
+  if (!pathName || pathName === '' || !name || name === '') {
     return res.status(400).json({
       error: 'Invalid query argument',
       data: null,
     });
   }
 
-  const folderPath = path.join(pathName, name);
+  const folderPath = PATH.join(pathName, name);
   const isFolderExists = fs.existsSync(folderPath);
   if (!isFolderExists) {
     return res.status(400).json({
