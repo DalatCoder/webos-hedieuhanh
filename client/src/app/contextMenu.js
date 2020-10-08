@@ -1,5 +1,6 @@
 import renderNewFileModal from './newFileModal';
 import renderNewFolderModal from './newFolderModal';
+import renderDeleteModal from './deleteModal';
 import attachContextMenuIcon from './utils/attachContextMenuIcon';
 
 function handleItemSelected(itemName, itemObj, currentPath, callback) {
@@ -12,6 +13,10 @@ function handleItemSelected(itemName, itemObj, currentPath, callback) {
 
     case 'new file':
       renderNewFileModal(currentPath, callback);
+      break;
+
+    case 'delete':
+      renderDeleteModal(itemObj, currentPath, callback);
       break;
 
     default:
