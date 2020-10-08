@@ -2,10 +2,12 @@
 
 import shortenString from './utils/shortenString';
 import attachFileIcon from './utils/attachFileIcon';
+import renderContextMenu from './contextMenu';
 
 let state = {
   selectedItem: {},
   directories: [],
+  currentPath: '',
 };
 
 export default function renderTable(elementID, source) {
@@ -30,6 +32,7 @@ export default function renderTable(elementID, source) {
   }
 
   state.directories = source;
+  state.currentPath = source[0].path;
 
   const table = document.createElement('table');
   table.classList.add('table');
@@ -92,6 +95,11 @@ export default function renderTable(elementID, source) {
   table.appendChild(tbody);
 
   tableRoot.appendChild(table);
+  tableRoot.addEventListener('contextmenu', () => {
+    const selectedItem = state.directories.find((dir) => dir.selected === true);
+    if (selectedItem) handleContextMenuOpen(selectedItem);
+    else handleContextMenuOpen(null);
+  });
 }
 
 function handleTableRowClick(item) {
@@ -127,4 +135,8 @@ async function handleTableRowDoubleClick(item) {
   const { data: directories } = res;
 
   renderTable('table', directories);
+}
+
+function handleContextMenuOpen(item) {
+  renderContextMenu('detail-panel', item, state.currentPath);
 }

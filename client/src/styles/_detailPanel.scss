@@ -1,0 +1,49 @@
+.detail-panel {
+  position: fixed;
+  top: 0;
+  left: 0;
+  bottom: 0;
+  right: 0;
+  background-color: rgba(0, 0, 0, 0.3);
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  &-items {
+    list-style: none;
+    background-color: white;
+    width: 300px;
+    padding: 20px;
+    border: none;
+    border-radius: 10px;
+    box-shadow: 2px 10px 10px -5px rgba(0, 0, 0, 0.5);
+  }
+
+  &-item {
+    &:not(:last-child) {
+      border-bottom: 1px solid #ccc;
+    }
+
+    &:hover {
+      background-color: #ccc;
+    }
+
+    transition: all 300ms ease;
+    font-size: 20px;
+    user-select: none;
+    padding: 10px 5px 5px;
+
+    &--center {
+      text-align: center;
+    }
+    &--close {
+      display: block;
+      margin-top: 20px;
+    }
+
+    .fas {
+      width: 25px;
+    }
+  }
+}
