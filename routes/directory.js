@@ -89,6 +89,7 @@ router.get('/', async (req, res) => {
   res.json({
     error: null,
     data: directories,
+    path,
   });
 });
 

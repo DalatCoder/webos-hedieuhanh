@@ -10,8 +10,10 @@ let state = {
   currentPath: '',
 };
 
-export default function renderTable(elementID, source) {
+export default function renderTable(elementID, directoriesObject) {
   const tableRoot = document.getElementById(elementID);
+  const source = directoriesObject.directories;
+  state.currentPath = directoriesObject.path;
 
   // Clear UI
   tableRoot.innerHTML = '';
@@ -32,7 +34,7 @@ export default function renderTable(elementID, source) {
   }
 
   state.directories = source;
-  state.currentPath = source[0].path;
+  console.log(state.currentPath);
 
   const table = document.createElement('table');
   table.classList.add('table');
@@ -110,7 +112,12 @@ function handleTableRowClick(item) {
     else dir.selected = false;
   }
 
-  renderTable('table', state.directories);
+  const dirObj = {
+    directories: state.directories,
+    path: state.currentPath,
+  };
+
+  renderTable('table', dirObj);
 }
 
 async function handleTableRowDoubleClick(item) {
@@ -132,9 +139,20 @@ async function handleTableRowDoubleClick(item) {
 
   const raw = await fetch(url);
   const res = await raw.json();
-  const { data: directories } = res;
+  const { data: directories, path } = res;
 
-  renderTable('table', directories);
+  state.directories = directories;
+
+  console.log('double', state.currentPath);
+
+  const dirObj = {
+    directories,
+    path,
+  };
+
+  renderTable('table', dirObj);
+
+  state.currentPath = path;
 }
 
 function handleContextMenuOpen(item) {
@@ -150,9 +168,16 @@ function handleContextMenuOpen(item) {
           `http://localhost:4000/api/directory?path=${state.currentPath}`,
         );
         const res = await raw.json();
-        state.directories = res.data;
 
-        renderTable('table', state.directories);
+        state.directories = res.data;
+        state.currentPath = res.path;
+
+        const dirObj = {
+          directories: res.data,
+          path: res.path,
+        };
+
+        renderTable('table', dirObj);
       }
     },
   );
