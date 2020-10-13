@@ -20,6 +20,8 @@ async function fetchData(url, callback) {
     // console.log(directories, path);
     renderTable('table', { directories, path });
 
+    console.log(state)
+
     if (state.length === 0) state = directories;
 
     render();

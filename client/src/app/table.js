@@ -14,6 +14,8 @@ const state = {
 function handleTableRowClick(item) {
   state.selectedItem = item;
 
+console.log(state.directories)
+
   for (let i = 0; i < state.directories.length; i += 1) {
     const dir = state.directories[i];
     if (dir.id === item.id) dir.selected = !dir.selected;
@@ -29,11 +31,15 @@ function handleTableRowClick(item) {
 }
 
 async function handleTableRowDoubleClick(item) {
-  const newPath = `${item.path}/${item.name}`;
+  let newPath = `${item.path}/${item.name}`;
+  if (item.name === '..Back') {
+    newPath = `${item.path}`
+  }
+
   let url = 'http://localhost:4000/api';
 
   if (item.isFolder) {
-    url = `${url}/directory?path=${newPath}`;
+    url = `${url}/directory?path=${newPath}&requireParent=1`;
   } else {
     const arr = item.name.split('.');
     const ext = arr[arr.length - 1];
@@ -48,12 +54,14 @@ async function handleTableRowDoubleClick(item) {
         alert(err);
       } else {
         const raw = await fetch(
-          `http://localhost:4000/api/directory?path=${state.currentPath}`,
+          `http://localhost:4000/api/directory?path=${state.currentPath}&requireParent=1`,
         );
         const res = await raw.json();
 
         state.directories = res.data;
         state.currentPath = res.path;
+
+        console.log(state.directories)
 
         const dirObj = {
           directories: res.data,
@@ -93,7 +101,7 @@ function handleContextMenuOpen(item) {
         alert(err);
       } else {
         const raw = await fetch(
-          `http://localhost:4000/api/directory?path=${state.currentPath}`,
+          `http://localhost:4000/api/directory?path=${state.currentPath}&requireParent=1`,
         );
         const res = await raw.json();
 
@@ -174,12 +182,14 @@ export default function renderTable(elementID, directoriesObject) {
           }</span>
           <span>${shortenString(dir.name)}</span>
         </td>
-        <td>
-          ${new Date(dir.modifiedAt).toLocaleDateString()} 
-          at
-          ${new Date(dir.modifiedAt).toLocaleTimeString()}
-        </td>
-        <td>${dir.isFolder ? 'Folder' : 'File'}</td>
+        ${dir.modifiedAt ? `
+          <td>
+            ${new Date(dir.modifiedAt).toLocaleDateString()} 
+            at
+            ${new Date(dir.modifiedAt).toLocaleTimeString()}
+          </td>        
+        ` : `<td></td>`}
+        <td>${dir.isFolder ? dir.name === '..Back' ? '' : 'Folder' : 'File'}</td>
         <td>${dir.size ? `${dir.size} B` : ''}</td>
     `;
 

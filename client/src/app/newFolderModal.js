@@ -10,7 +10,7 @@ async function handleFormSubmit(currentPath, folderName, closeModal, callback) {
     const raw = await fetch(url, requestOptions);
     const res = await raw.json();
 
-    if (!res.data) callback(res.error, null);
+    if (res.error) callback(res.error, null);
     else callback(null, res.data);
   } catch (error) {
     console.log('error', error);
@@ -24,6 +24,7 @@ export default function renderNewFolderModal(currentPath, callback) {
   const modal = document.getElementById('new-folder');
   const form = document.createElement('form');
   const formGroup = document.createElement('div');
+  formGroup.classList.add('form-group');
 
   formGroup.innerHTML = `
     <input
@@ -44,6 +45,17 @@ export default function renderNewFolderModal(currentPath, callback) {
   form.appendChild(formGroup);
   form.appendChild(document.createElement('hr'));
 
+  const closeBtn = document.createElement('button');
+  closeBtn.classList.add('btn');
+  closeBtn.classList.add('btn-danger');
+  closeBtn.classList.add('btn-block');
+  closeBtn.classList.add('mt-1');
+  closeBtn.textContent = 'Close';
+
+  closeBtn.addEventListener('click', () => {
+    modal.hidden = true;
+  });
+
   form.addEventListener('submit', (e) => {
     e.preventDefault();
     const newFolderName = form.querySelector('input').value;
@@ -60,17 +72,6 @@ export default function renderNewFolderModal(currentPath, callback) {
       },
       callback,
     );
-  });
-
-  const closeBtn = document.createElement('button');
-  closeBtn.classList.add('btn');
-  closeBtn.classList.add('btn-danger');
-  closeBtn.classList.add('btn-block');
-  closeBtn.classList.add('mt-1');
-  closeBtn.textContent = 'Close';
-
-  closeBtn.addEventListener('click', () => {
-    modal.hidden = true;
   });
 
   const wrapper = document.createElement('div');

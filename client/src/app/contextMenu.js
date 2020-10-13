@@ -81,12 +81,6 @@ export default function renderContextMenu(
   closeItem.classList.add('detail-panel-item--center');
   closeItem.classList.add('detail-panel-item--close');
 
-  closeItem.addEventListener('click', function handleCloseContextMenu() {
-    contextMenu.hidden = true;
-  });
-
-  ul.appendChild(closeItem);
-
   contextMenu.innerHTML = '';
   contextMenu.appendChild(ul);
   contextMenu.hidden = false;
