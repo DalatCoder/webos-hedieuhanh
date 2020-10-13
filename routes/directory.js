@@ -24,7 +24,7 @@ function safeReadDirSync(path) {
 // @desc    Get all files and folders in /mnt/c
 // @access  Public
 router.get('/', async (req, res) => {
-  const { path } = req.query;
+  const { path, requireParent } = req.query;
 
   if (!path || path === '') {
     return res.status(400).json({
@@ -48,6 +48,29 @@ router.get('/', async (req, res) => {
   }
 
   if (!dirData) dirData = [];
+
+  if (requireParent) {
+    // Parent path
+    // /mnt/c/DEV => ["", "mnt", "c", "DEV"]
+    let parentPath = '/';
+    const arr = path.split('/');
+    if (arr.length > 2) {
+      parentPath = arr.slice(0, arr.length - 1).join('/');
+    }
+
+  // Add back fodler
+  const backFolder = {
+    id: uuid.v4(),
+    name: '..Back',
+    title: '..Back',
+    isFile: false,
+    isFolder: true,
+    folder: true,
+    path: parentPath
+  }
+
+  directories.push(backFolder);
+  }
 
   for (const dir of dirData) {
     let stats;
