@@ -3,6 +3,7 @@ const fs = require('fs');
 const PATH = require('path');
 const uuid = require('uuid');
 const rimraf = require('rimraf');
+const ncp = require('ncp').ncp;
 
 const router = express.Router();
 
@@ -210,5 +211,49 @@ router.delete('/', async (req, res) => {
     });
   }
 });
+
+// @route   POST /directory/copy?src=/mnt/c&dist=/mnt/d
+// @desc    Copy all files in /mnt/c to /mnt/d
+// @access  Public
+router.post('/copy', async (req, res) => {
+  const { src, dest } = req.body;
+
+  try {
+    if (!fs.existsSync(src)) {
+      return res.status(400).json({
+        error: 'Folder does not exist!',
+        data: null
+      })
+    }
+
+    if (fs.existsSync(dest)) {
+      return res.status(400).json({
+        error: 'There is already folder with the same name in destination folder',
+        data: null
+      })
+    }
+
+    ncp(src, dest, err => {
+      if (err) {
+        console.error(err);
+        return res.status(500).json({
+          error: 'Sorry! Something went wrong!',
+          data: null
+        })
+      }
+
+    res.json({
+      error: null,
+      data: dest
+    })
+    })
+  } catch (error) {
+    console.errro(error);
+    res.status(500).json({
+      error: 'Sorry! Something went wrong!',
+      data: null
+    })
+  }
+})
 
 module.exports = router;

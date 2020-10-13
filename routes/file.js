@@ -225,4 +225,43 @@ router.put('/rename', async (req, res) => {
   }
 });
 
+// @route   POST /file/copy
+// Body 
+// src: /mnt/c/test.txt
+// dest: /mnt/c/test-copy.txt
+// @desc    Copy file /mnt/c/test.txt to /mnt/c/test-copy.txt
+// @access  Public
+router.post('/copy', async (req, res) => {
+  const { src, dest } = req.body;
+  try {
+
+    if (!fs.existsSync(src)) {
+      return res.status(400).json({
+        error: 'File does not exist!',
+        data: null
+      })
+    }
+
+    if (fs.existsSync(dest)) {
+      return res.status(400).json({
+        error: 'There is already file with the same name in destination folder',
+        data: null
+      })
+    }
+
+    await fs.promises.copyFile(src, dest)
+
+    res.json({
+      error: null,
+      data: dest
+    })
+  } catch (err) {
+    console.error(err);
+    return res.status(500).json({
+      error: 'Sorry! Something went wrong!',
+      data: null,
+    });
+  }
+})
+
 module.exports = router;
