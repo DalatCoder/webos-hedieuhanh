@@ -34,7 +34,7 @@ router.get('/', async (req, res) => {
   }
 
   const directories = [];
-  const regex = RegExp('.txt$');
+  const regex = new RegExp('\\.txt$');
   let dirData = [];
 
   try {
