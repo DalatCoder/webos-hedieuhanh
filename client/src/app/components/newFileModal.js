@@ -1,34 +1,4 @@
-async function handleFormSubmit(
-  currentPath,
-  fileName,
-  fileContent,
-  closeModal,
-  callback,
-) {
-  const requestOptions = {
-    method: 'POST',
-    redirect: 'follow',
-  };
-
-  const url = `http://localhost:4000/api/file?path=${currentPath}&filename=${fileName}&content=${fileContent}`;
-
-  try {
-    const raw = await fetch(url, requestOptions);
-    const res = await raw.json();
-
-    console.log(res);
-
-    if (!res.data) callback(res.error, null);
-    else callback(null, res.data);
-  } catch (error) {
-    console.log('error', error);
-    callback(error.message, null);
-  } finally {
-    closeModal();
-  }
-}
-
-export default function renderNewFileModal(currentPath, callback) {
+const renderNewFileModal = (onFormSubmit) => {
   const modal = document.getElementById('new-file');
   const form = document.createElement('form');
   const formGroup = document.createElement('div');
@@ -48,8 +18,7 @@ export default function renderNewFileModal(currentPath, callback) {
       id="file-content"
       class="form-control"
       rows="7"
-    >
-    </textarea>
+    ></textarea>
 
     <input
       type="submit"
@@ -63,23 +32,12 @@ export default function renderNewFileModal(currentPath, callback) {
 
   form.addEventListener('submit', (e) => {
     e.preventDefault();
+    modal.hidden = true;
+
     const newFileName = form.querySelector('input').value;
     const fileContent = form.querySelector('textarea').value;
 
-    if (newFileName.trim().length === 0) {
-      alert('Invalid file name!');
-      return;
-    }
-
-    handleFormSubmit(
-      currentPath,
-      newFileName,
-      fileContent,
-      function closeModal() {
-        modal.hidden = true;
-      },
-      callback,
-    );
+    onFormSubmit(newFileName, fileContent);
   });
 
   const closeBtn = document.createElement('button');
@@ -101,4 +59,6 @@ export default function renderNewFileModal(currentPath, callback) {
   modal.appendChild(wrapper);
 
   modal.hidden = false;
-}
+};
+
+export default renderNewFileModal;

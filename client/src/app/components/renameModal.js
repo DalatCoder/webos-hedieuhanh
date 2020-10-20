@@ -1,38 +1,4 @@
-async function handleSubmitButton(
-  currentPath,
-  item,
-  newItemName,
-  closeModal,
-  callback,
-) {
-  const requestOptions = {
-    method: 'PUT',
-    redirect: 'follow',
-  };
-
-  let url = 'http://localhost:4000/api';
-
-  if (item.isFolder) {
-    url = `${url}/directory?path=${currentPath}&oldname=${item.name}&newname=${newItemName}`;
-  } else {
-    url = `${url}/file/rename?path=${currentPath}&oldname=${item.name}&newname=${newItemName}`;
-  }
-
-  try {
-    const raw = await fetch(url, requestOptions);
-    const res = await raw.json();
-
-    if (res.error) callback(res.error, null);
-    else callback(null, res.data);
-  } catch (error) {
-    console.log('error', error);
-    callback(error.message, null);
-  } finally {
-    closeModal();
-  }
-}
-
-export default function renderRenameModal(item, currentPath, callback) {
+export default function renderRenameModal(item, onSubmit) {
   const modal = document.getElementById('rename-item');
 
   const wrapper = document.createElement('div');
@@ -72,20 +38,14 @@ export default function renderRenameModal(item, currentPath, callback) {
 
   btnSubmit.addEventListener('click', () => {
     const newName = modal.querySelector('input#new-name').value;
+    modal.hidden = true;
+
     if (newName.trim().length === 0) {
       alert('Invalid name!');
       return;
     }
 
-    handleSubmitButton(
-      currentPath,
-      item,
-      newName,
-      function closeModal() {
-        modal.hidden = true;
-      },
-      callback,
-    );
+    onSubmit(newName);
   });
 
   const hr = document.createElement('hr');
