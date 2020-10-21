@@ -1,12 +1,15 @@
-const AppError = require('../utils/AppError')
+const AppError = require('../utils/AppError');
 
-const handlePathDoesNotExist = ({path}) => {
+const handlePathDoesNotExist = ({ path }) => {
   return new AppError(`Path: '${path} does not exist.`, 400);
-}
+};
 
-const handleDirectoryPermission = ({path}) => {
-  return new AppError(`User do not have permission to read directory at: '${path}'.`, 400);
-}
+const handleDirectoryPermission = ({ path }) => {
+  return new AppError(
+    `User do not have permission to read directory at: '${path}'.`,
+    400
+  );
+};
 
 const responseError = (err, req, res) => {
   // Only send the error that we have known
@@ -14,17 +17,17 @@ const responseError = (err, req, res) => {
   if (err.isOperational) {
     res.status(err.statusCode).json({
       status: err.status,
-      message: err.message
+      message: err.message,
     });
   } else {
     console.error('ERROR: 💥', err); // Log the error for fixing later
 
     res.status(500).json({
       status: 'error',
-      message: 'Oops! Something went wrong! :('
+      message: 'Oops! Something went wrong! :(',
     });
   }
-}
+};
 
 module.exports = (err, req, res, next) => {
   err.statusCode = err.statusCode || 500;
@@ -41,14 +44,18 @@ module.exports = (err, req, res, next) => {
     case 'EPERM':
       error = handleDirectoryPermission(err);
       break;
-    
+
     case 'EACCES':
       error = handleDirectoryPermission(err);
       break;
-    
+
+    case 'EROFS':
+      error = handleDirectoryPermission(err);
+      break;
+
     default:
       break;
   }
 
   responseError(error, req, res);
-}
+};
