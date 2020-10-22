@@ -7,6 +7,12 @@ const globalErrorHandler = require('./controllers/errorController');
 
 const app = express();
 
+app.set('view engine', 'pug');
+app.set('views', path.join(__dirname, 'views'));
+
+// Serving static files
+app.use(express.static(path.join(__dirname, 'public')));
+
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
@@ -16,12 +22,7 @@ app.use(cors());
 // Implement CORS for complex request (PUT PATCH DELETE)
 app.options('*', cors());
 
-app.use(express.static(path.join(__dirname, 'client', 'dist')));
-
-app.get('/', (req, res) => {
-  res.send(path.join(__dirname, 'client', 'dist', 'index.html'));
-});
-
+app.use('/', require('./routes/view'))
 app.use('/api/directory', require('./routes/directory'));
 app.use('/api/file', require('./routes/file'));
 
