@@ -21,6 +21,9 @@ export default function attachContextMenuIcon(menuItem) {
     case 'copy':
       return 'fas fa-copy';
 
+    case 'cut':
+      return 'fas fa-cut';
+
     case 'paste':
       return 'fas fa-paste';
 
