@@ -1,4 +1,4 @@
-const copyFile = (src, dest, name) => {
+const copyDirectory = (src, dest, name) => {
   const myHeaders = new Headers();
   myHeaders.append('Content-Type', 'application/json');
 
@@ -12,7 +12,7 @@ const copyFile = (src, dest, name) => {
   };
 
   return new Promise((resolve) => {
-    fetch('http://localhost:4000/api/file/copy', requestOptions)
+    fetch('http://localhost:4000/api/directory/copy', requestOptions)
       .then((response) => response.json())
       .then((result) => resolve(result))
       .catch((err) => {
@@ -23,4 +23,4 @@ const copyFile = (src, dest, name) => {
   });
 };
 
-export default copyFile;
+export default copyDirectory;

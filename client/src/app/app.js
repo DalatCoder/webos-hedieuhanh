@@ -5,6 +5,8 @@ import createNewDirectory from './api/createNewDirectory';
 import createNewFile from './api/createNewFile';
 import renameFile from './api/renameFile';
 import renameDirectory from './api/renameDirectory';
+import copyFile from './api/copyFile';
+import copyDirectory from './api/copyDirectory';
 import deleteFile from './api/deleteFile';
 import deleteDirectory from './api/deleteDirectory';
 import renderTreeView from './components/treeView';
@@ -205,34 +207,15 @@ function handleOnCutSelect(selectedItem) {
 }
 
 async function handleOnPasteSelect(currentPath) {
-  const doituong = state.elcontaine;
-  const nguon = doituong.path;
-  const ten = doituong.name;
-  const dich = currentPath;
+  const { path: src, name, isFile } = state.elcontaine;
+  const dest = currentPath;
 
-  const myHeaders = new Headers();
-  myHeaders.append('Content-Type', 'application/json');
-
-  const raw = JSON.stringify({
-    src: nguon,
-    dest: dich,
-    name: ten,
-  });
-
-  const requestOptions = {
-    method: 'POST',
-    headers: myHeaders,
-    body: raw,
-    redirect: 'follow',
-  };
-
-  const res = await fetch(
-    `http://localhost:4000/api/${doituong.isFile ? 'file' : 'directory'}/copy`,
-    requestOptions,
-  );
-  const response = await res.json();
+  let response;
+  if (isFile) response = await copyFile(src, dest, name);
+  else response = await copyDirectory(src, dest, name);
 
   if (!response.data) return alert(`ERROR! ${response.message}`);
+
   state.directories = response.data.items;
   state.currentPath = response.data.currentPath;
   state.parentPath = response.data.parentPath;
@@ -251,8 +234,6 @@ async function handleOnPasteSelect(currentPath) {
 
 function handleOnContextMenuOpen() {
   const selectedItem = state.directories.find((d) => d.selected);
-
-  // console.log(state);
 
   renderContextMenu(
     state.currentPath,
