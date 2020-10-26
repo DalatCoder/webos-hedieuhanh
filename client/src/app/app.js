@@ -200,6 +200,8 @@ function handleOnCutSelect(selectedItem) {
   // 1. Lay item
 
   // 2. Xoa item
+
+  // 3. Hien thi moi
 }
 
 async function handleOnPasteSelect(currentPath) {
