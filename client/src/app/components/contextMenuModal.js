@@ -1,76 +1,103 @@
 import attachContextMenuIcon from '../utils/attachContextMenuIcon';
 
-function renderContextMenuAction(action) {
+function createContextMenuAction(action) {
   const li = document.createElement('li');
-
+  li.classList.add('detail-panel-item');
   li.innerHTML = `
-    <li class="detail-panel-item">
       <span><i class="${attachContextMenuIcon(
         action.toLowerCase(),
-      )}"></i></span> ${action}
-    </li>      
+      )}"></i></span> ${action}   
   `;
 
   return li;
 }
 
 function renderContextMenu(
-  source,
+  currentPath,
+  elcontaine,
+  selectedItem,
   onNewFolderSelect,
   onNewFileSelect,
   onEditSelect,
   onRenameSelect,
   onDeleteSelect,
+  onCopySelect,
+  onCutSelect,
+  onPasteSelect,
 ) {
   const contextMenu = document.getElementById('detail-panel');
   const actionListEl = document.createElement('ul');
   actionListEl.classList.add('detail-panel-items');
 
-  const newFolderAction = renderContextMenuAction('New Folder');
+  const newFolderAction = createContextMenuAction('New Folder');
   newFolderAction.addEventListener('click', () => {
     contextMenu.hidden = true;
     onNewFolderSelect();
   });
   actionListEl.appendChild(newFolderAction);
 
-  const newFileAction = renderContextMenuAction('New File');
+  const newFileAction = createContextMenuAction('New File');
   newFileAction.addEventListener('click', () => {
     contextMenu.hidden = true;
     onNewFileSelect();
   });
   actionListEl.appendChild(newFileAction);
 
-  if (source) {
-    const { editable, renameable, deleteable } = source.attributes;
+  if (elcontaine) {
+    const pasteAction = createContextMenuAction('Paste');
+    pasteAction.addEventListener('click', function () {
+      contextMenu.hidden = true;
+      onPasteSelect(currentPath);
+    });
+    actionListEl.appendChild(pasteAction);
+  }
+
+  if (selectedItem) {
+    const copyAction = createContextMenuAction('Copy');
+    copyAction.addEventListener('click', function () {
+      contextMenu.hidden = true;
+      onCopySelect(selectedItem);
+    });
+    actionListEl.appendChild(copyAction);
+
+    const cutAction = createContextMenuAction('Cut');
+    cutAction.addEventListener('click', function () {
+      contextMenu.hidden = true;
+      onCutSelect(selectedItem);
+    });
+    actionListEl.appendChild(cutAction);
+
+    const { editable, renameable, deleteable } = selectedItem.attributes;
+
     if (editable) {
-      const editFileAction = renderContextMenuAction('Edit');
+      const editFileAction = createContextMenuAction('Edit');
       editFileAction.addEventListener('click', () => {
         contextMenu.hidden = true;
-        onEditSelect(source);
+        onEditSelect(selectedItem);
       });
       actionListEl.appendChild(editFileAction);
     }
 
     if (renameable) {
-      const renameAction = renderContextMenuAction('Rename');
+      const renameAction = createContextMenuAction('Rename');
       renameAction.addEventListener('click', () => {
         contextMenu.hidden = true;
-        onRenameSelect(source);
+        onRenameSelect(selectedItem);
       });
       actionListEl.appendChild(renameAction);
     }
 
     if (deleteable) {
-      const deleteAction = renderContextMenuAction('Delete');
+      const deleteAction = createContextMenuAction('Delete');
       deleteAction.addEventListener('click', () => {
         contextMenu.hidden = true;
-        onDeleteSelect(source);
+        onDeleteSelect(selectedItem);
       });
       actionListEl.appendChild(deleteAction);
     }
   }
 
-  const closeAction = renderContextMenuAction('Close');
+  const closeAction = createContextMenuAction('Close');
   closeAction.classList.add(
     'detail-panel-item--center',
     'detail-panel-item--close',
