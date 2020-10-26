@@ -3,6 +3,7 @@ const PATH = require('path');
 const uuid = require('uuid');
 const rimraf = require('rimraf');
 const ncp = require('ncp');
+const fse = require('fs-extra');
 
 const catchAsync = require('../utils/catchAsync');
 const AppError = require('../utils/AppError');
@@ -198,4 +199,42 @@ exports.copyFolder = catchAsync(async (req, res, next) => {
     req.query = { path: dest };
     this.getAllItemsInDirectory(req, res);
   });
+});
+
+exports.moveFolder = catchAsync(async (req, res) => {
+  const { src, name, dest } = req.body;
+
+  if (!src) throw new AppError('Please provide valid source path.', 400);
+  if (!dest) throw new AppError('Please provide valid destination path.', 400);
+  if (!name) throw new AppError('Please provide valid folder name.', 400);
+
+  // Check if source path exists
+  await FS.promises.access(src);
+
+  // Check if destination path exists
+  await FS.promises.access(dest);
+
+  // Check if fullpath exists
+  await FS.promises.access(PATH.join(src, name));
+
+  // Check if user have permission to move folder
+  let stat = await readStat(PATH.join(src, name));
+  if (!stat)
+    throw new AppError(
+      `You don't have permission to move folder '${name}'.`,
+      400
+    );
+
+  // Check if there is already folder with the same name in destination directory
+  stat = await readStat(PATH.join(dest, name));
+  if (stat)
+    throw new AppError(
+      `There is already folder with name '${name}' in the destination path.`,
+      400
+    );
+
+  await fse.move(PATH.join(src, name), PATH.join(dest, name));
+
+  req.query = { path: dest };
+  this.getAllItemsInDirectory(req, res);
 });

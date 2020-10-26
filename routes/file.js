@@ -1,18 +1,21 @@
 const express = require('express');
-const fileController = require('../controllers/fileController')
+const fileController = require('../controllers/fileController');
 
 const router = express.Router();
 
-router.route('/')
+router
+  .route('/')
   .post(fileController.createFile)
   .put(fileController.renameFile)
-  .delete(fileController.deleteFile)
+  .delete(fileController.deleteFile);
 
-router.route('/content')
+router
+  .route('/content')
   .get(fileController.getFileContent)
-  .put(fileController.updateFileContent)
+  .put(fileController.updateFileContent);
 
-router.route('/copy')
-  .post(fileController.copyFile)
+router.route('/copy').post(fileController.copyFile);
+
+router.route('/cut').post(fileController.moveFile);
 
 module.exports = router;

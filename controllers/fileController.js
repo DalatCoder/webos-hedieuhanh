@@ -1,5 +1,6 @@
 const PATH = require('path');
 const FS = require('fs');
+const fse = require('fs-extra');
 
 const catchAsync = require('../utils/catchAsync');
 const AppError = require('../utils/AppError');
@@ -200,4 +201,42 @@ exports.copyFile = catchAsync(async (req, res) => {
 
   req.query = { path: dest };
   getAllItemsInDirectory(req, res);
+});
+
+exports.moveFile = catchAsync(async (req, res) => {
+  const { src, name, dest } = req.body;
+
+  if (!src) throw new AppError('Please provide valid source path.', 400);
+  if (!dest) throw new AppError('Please provide valid destination path.', 400);
+  if (!name) throw new AppError('Please provide valid file name.', 400);
+
+  // Check if source path exists
+  await FS.promises.access(src);
+
+  // Check if destination path exists
+  await FS.promises.access(dest);
+
+  // Check if fullpath exists
+  await FS.promises.access(PATH.join(src, name));
+
+  // Check if user have permission to move file
+  let stat = await readStat(PATH.join(src, name));
+  if (!stat)
+    throw new AppError(
+      `You don't have permission to move file.'${name}'.`,
+      400
+    );
+
+  // Check if there is already file with the same name in destination directory
+  stat = await readStat(PATH.join(dest, name));
+  if (stat)
+    throw new AppError(
+      `There is already file with name '${name}' in the destination path.`,
+      400
+    );
+
+  await fse.move(PATH.join(src, name), PATH.join(dest, name));
+
+  req.query = { path: dest };
+  this.getAllItemsInDirectory(req, res);
 });

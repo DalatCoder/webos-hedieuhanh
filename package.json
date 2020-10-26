@@ -23,6 +23,7 @@
   "dependencies": {
     "cors": "^2.8.5",
     "express": "^4.17.1",
+    "fs-extra": "^9.0.1",
     "ncp": "^2.0.0",
     "pug": "^3.0.0",
     "rimraf": "^3.0.2",

@@ -12,4 +12,6 @@ router
 
 router.route('/copy').post(directoryController.copyFolder);
 
+router.route('/cut').post(directoryController.moveFolder);
+
 module.exports = router;
