@@ -7,6 +7,7 @@ function renderListView(
   onItemClick,
   onItemDoubleClick,
   onContextMenuOpen,
+  onBackClick,
 ) {
   const listView = document.getElementById('table');
   listView.innerHTML = '';
@@ -35,8 +36,8 @@ function renderListView(
         <td></td>
         <td></td>  
   `;
-  trBack.addEventListener('dblclick', () => {
-    onItemDoubleClick({ parentPath });
+  trBack.addEventListener('click', () => {
+    onBackClick(parentPath);
   });
   tbody.appendChild(trBack);
 
@@ -81,7 +82,9 @@ function renderListView(
   table.appendChild(tbody);
 
   listView.appendChild(table);
-  listView.addEventListener('contextmenu', onContextMenuOpen);
+  listView.addEventListener('contextmenu', () => {
+    onContextMenuOpen();
+  });
 }
 
 export default renderListView;
