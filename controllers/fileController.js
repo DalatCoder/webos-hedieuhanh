@@ -238,5 +238,5 @@ exports.moveFile = catchAsync(async (req, res) => {
   await fse.move(PATH.join(src, name), PATH.join(dest, name));
 
   req.query = { path: dest };
-  this.getAllItemsInDirectory(req, res);
+  getAllItemsInDirectory(req, res);
 });
