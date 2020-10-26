@@ -20,12 +20,10 @@ const state = {
   directories: [],
   currentPath: '',
   parentPath: '',
+  elcontaine: null,
 };
 
 function handleOnItemClick(directory) {
-  // Back folder
-  if (!directory.id) return;
-
   state.directories = state.directories.map((dir) => {
     const d = { ...dir };
     if (d.id === directory.id) d.selected = !d.selected;
@@ -39,6 +37,7 @@ function handleOnItemClick(directory) {
     handleOnItemClick,
     handleOnItemDoubleClick,
     handleOnContextMenuOpen,
+    handleOnBackClick,
   );
 }
 
@@ -47,9 +46,7 @@ async function handleOnItemDoubleClick(item) {
     if (item.attributes.editable) renderEditFileModal(item.path, item.name);
     else alert('File do not support to view or edit');
   } else {
-    let url = '';
-    if (item.parentPath) url = item.parentPath;
-    else url = PATH.join(item.path, item.name);
+    let url = PATH.join(item.path, item.name);
 
     const response = await fetchDirectory(url);
     if (!response.data) return alert(`ERROR! ${response.message}`);
@@ -63,8 +60,26 @@ async function handleOnItemDoubleClick(item) {
       handleOnItemClick,
       handleOnItemDoubleClick,
       handleOnContextMenuOpen,
+      handleOnBackClick,
     );
   }
+}
+
+async function handleOnBackClick(parentPath) {
+  const response = await fetchDirectory(parentPath);
+  if (!response.data) return alert(`ERROR! ${response.message}`);
+  state.directories = response.data.items;
+  state.currentPath = response.data.currentPath;
+  state.parentPath = response.data.parentPath;
+
+  renderListView(
+    state.directories,
+    state.parentPath,
+    handleOnItemClick,
+    handleOnItemDoubleClick,
+    handleOnContextMenuOpen,
+    handleOnBackClick,
+  );
 }
 
 function handleOnNewFolderSelect() {
@@ -85,6 +100,7 @@ function handleOnNewFolderSelect() {
       handleOnItemClick,
       handleOnItemDoubleClick,
       handleOnContextMenuOpen,
+      handleOnBackClick,
     );
   });
 }
@@ -110,6 +126,7 @@ function handleOnNewFileSelect() {
       handleOnItemClick,
       handleOnItemDoubleClick,
       handleOnContextMenuOpen,
+      handleOnBackClick,
     );
   });
 }
@@ -141,6 +158,7 @@ function handleOnRenameSelect(selectedItem) {
       handleOnItemClick,
       handleOnItemDoubleClick,
       handleOnContextMenuOpen,
+      handleOnBackClick,
     );
   });
 }
@@ -167,19 +185,87 @@ function handleOnDeleteSelect(selectedItem) {
       handleOnItemClick,
       handleOnItemDoubleClick,
       handleOnContextMenuOpen,
+      handleOnBackClick,
     );
   });
 }
 
+function handleOnCopySelect(selectedItem) {
+  state.elcontaine = selectedItem;
+}
+
+function handleOnCutSelect(selectedItem) {
+  state.elcontaine = selectedItem;
+
+  // 1. Lay item
+
+  // 2. Xoa item
+
+  // 3. Hien thi moi
+}
+
+async function handleOnPasteSelect(currentPath) {
+  const doituong = state.elcontaine;
+  const nguon = doituong.path;
+  const ten = doituong.name;
+  const dich = currentPath;
+
+  const myHeaders = new Headers();
+  myHeaders.append('Content-Type', 'application/json');
+
+  const raw = JSON.stringify({
+    src: nguon,
+    dest: dich,
+    name: ten,
+  });
+
+  const requestOptions = {
+    method: 'POST',
+    headers: myHeaders,
+    body: raw,
+    redirect: 'follow',
+  };
+
+  const res = await fetch(
+    `http://localhost:4000/api/${doituong.isFile ? 'file' : 'directory'}/copy`,
+    requestOptions,
+  );
+  const response = await res.json();
+
+  if (!response.data) return alert(`ERROR! ${response.message}`);
+  state.directories = response.data.items;
+  state.currentPath = response.data.currentPath;
+  state.parentPath = response.data.parentPath;
+
+  renderListView(
+    state.directories,
+    state.parentPath,
+    handleOnItemClick,
+    handleOnItemDoubleClick,
+    handleOnContextMenuOpen,
+    handleOnBackClick,
+  );
+
+  state.elcontaine = null;
+}
+
 function handleOnContextMenuOpen() {
   const selectedItem = state.directories.find((d) => d.selected);
+
+  // console.log(state);
+
   renderContextMenu(
+    state.currentPath,
+    state.elcontaine,
     selectedItem,
     handleOnNewFolderSelect,
     handleOnNewFileSelect,
     handleOnEditFileSelect,
     handleOnRenameSelect,
     handleOnDeleteSelect,
+    handleOnCopySelect,
+    handleOnCutSelect,
+    handleOnPasteSelect,
   );
 }
 
@@ -195,6 +281,7 @@ function handleOnTreeViewItemClick(directories, currentPath, parentPath) {
       handleOnItemClick,
       handleOnItemDoubleClick,
       handleOnContextMenuOpen,
+      handleOnBackClick,
     );
   }
 }
@@ -215,6 +302,7 @@ async function main() {
     handleOnItemClick,
     handleOnItemDoubleClick,
     handleOnContextMenuOpen,
+    handleOnBackClick,
   );
 
   return state;
