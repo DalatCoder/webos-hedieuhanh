@@ -9,16 +9,21 @@ function createNavigationItem(item) {
 }
 
 export default function renderNavigation(
-  items,
+  directoryItems,
   onBackDirectoryClick,
   onNavigationItemClick,
 ) {
   const navigationElement = document.getElementById('navigation');
+  let items = [...directoryItems];
 
   // Hide navigation bar on root folder
   if (items.length === 1) {
     navigationElement.innerHTML = '&nbsp;';
     return;
+  }
+
+  if (items.length > 5) {
+    items = [items[0], ...items.slice(5, items.length)];
   }
 
   const naviagtionListElement = document.createElement('ul');
