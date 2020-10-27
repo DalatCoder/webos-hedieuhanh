@@ -1,5 +1,6 @@
 import attachFileIcon from '../utils/attachFileIcon';
 import shortenString from '../utils/shortenString';
+import attachItemName from '../utils/attachItemName';
 
 function renderListView(
   directories,
@@ -61,7 +62,9 @@ function renderListView(
           <span>${shortenString(dir.name)}</span>
         </td>
         <td>${date} at ${time}</td>
-        <td>${dir.isFolder ? 'Folder' : 'File'}</td>
+        <td>${
+          dir.isFolder ? 'File folder' : `${attachItemName(dir.extension)}`
+        }</td>
         <td>${Number.isInteger(dir.size) ? `${dir.size} B` : ''}</td>
     `;
 
