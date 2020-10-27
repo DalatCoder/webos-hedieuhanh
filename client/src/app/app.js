@@ -23,6 +23,8 @@ const state = {
   currentPath: '',
   parentPath: '',
   elcontaine: null,
+  user_copy_file: false,
+  user_cut_file: false,
 };
 
 function handleOnItemClick(directory) {
@@ -194,6 +196,7 @@ function handleOnDeleteSelect(selectedItem) {
 
 function handleOnCopySelect(selectedItem) {
   state.elcontaine = selectedItem;
+  state.user_copy_file = true;
 }
 
 function handleOnCutSelect(selectedItem) {
@@ -211,8 +214,15 @@ async function handleOnPasteSelect(currentPath) {
   const dest = currentPath;
 
   let response;
-  if (isFile) response = await copyFile(src, dest, name);
-  else response = await copyDirectory(src, dest, name);
+  if (user_copy_file) {
+    if (isFile) {
+      response = await copyFile(src, dest, name);
+    } else response = await copyDirectory(src, dest, name);
+  } else if (user_cut_file) {
+    if (isFile) {
+      response = await cutFile(src, dest, name);
+    } else response = await cutDirectory(src, dest, name);
+  }
 
   if (!response.data) return alert(`ERROR! ${response.message}`);
 
