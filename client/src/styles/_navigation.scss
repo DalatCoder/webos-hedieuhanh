@@ -1,6 +1,8 @@
 .navigation {
   padding: 0;
   font-size: 17px;
+  font-family: 'Sansita Swashed', cursive;
+  color: rgb(252, 133, 152);
 
   &-list {
     list-style: none;
@@ -23,8 +25,8 @@
 
     &:hover {
       cursor: pointer;
-      background-color: #333;
-      color: #fff;
+      background-color: rgb(252, 133, 152);
+      color: white;
     }
   }
 }
