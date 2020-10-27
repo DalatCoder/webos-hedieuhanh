@@ -7,6 +7,8 @@ import renameFile from './api/renameFile';
 import renameDirectory from './api/renameDirectory';
 import copyFile from './api/copyFile';
 import copyDirectory from './api/copyDirectory';
+import cutFile from './api/cutFile';
+import cutDirectory from './api/cutDirectory';
 import deleteFile from './api/deleteFile';
 import deleteDirectory from './api/deleteDirectory';
 import renderTreeView from './components/treeView';
@@ -201,12 +203,7 @@ function handleOnCopySelect(selectedItem) {
 
 function handleOnCutSelect(selectedItem) {
   state.elcontaine = selectedItem;
-
-  // 1. Lay item
-
-  // 2. Xoa item
-
-  // 3. Hien thi moi
+  state.user_cut_file = true;
 }
 
 async function handleOnPasteSelect(currentPath) {
@@ -214,11 +211,11 @@ async function handleOnPasteSelect(currentPath) {
   const dest = currentPath;
 
   let response;
-  if (user_copy_file) {
+  if (state.user_copy_file) {
     if (isFile) {
       response = await copyFile(src, dest, name);
     } else response = await copyDirectory(src, dest, name);
-  } else if (user_cut_file) {
+  } else if (state.user_cut_file) {
     if (isFile) {
       response = await cutFile(src, dest, name);
     } else response = await cutDirectory(src, dest, name);
@@ -240,6 +237,8 @@ async function handleOnPasteSelect(currentPath) {
   );
 
   state.elcontaine = null;
+  state.user_copy_file = false;
+  state.user_cut_file = false;
 }
 
 function handleOnContextMenuOpen() {
