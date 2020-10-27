@@ -1,10 +1,7 @@
 import attachFileIcon from '../utils/attachFileIcon';
 import shortenString from '../utils/shortenString';
-<<<<<<< HEAD
 import attachItemName from '../utils/attachItemName';
-=======
 import convertSize from '../utils/convertSize';
->>>>>>> b7e9e542d0efb604e6bbace55406142b4a9e8f2b
 
 function renderListView(
   directories,
