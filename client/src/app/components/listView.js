@@ -16,10 +16,10 @@ function renderListView(
   listView.innerHTML = '';
 
   const table = document.createElement('table');
-  table.classList.add('table', 'table-striped', 'table-hover', 'table-sm');
+  table.classList.add('table', 'table-hover', 'table-sm');
 
   const thead = document.createElement('thead');
-  thead.classList.add('thead-dark');
+  thead.classList.add('thead-pink');
   thead.innerHTML = `
     <tr>
       <th>Name</th>
