@@ -39,7 +39,7 @@ function renderListView(
     const [time, date] = dir.modifiedAt.split(', ');
 
     const html = `
-        <td title=${dir.name}>
+        <td title="${dir.name}">
           <span>${
             dir.isFolder
               ? '<i class="fas fa-folder"></i>'
@@ -48,9 +48,13 @@ function renderListView(
           <span>${shortenString(dir.name)}</span>
         </td>
         <td>${date} at ${time}</td>
-        <td>${
-          dir.isFolder ? 'File folder' : `${attachItemName(dir.extension)}`
-        }</td>
+        <td title="${
+          dir.isFolder
+            ? 'File folder'
+            : `${shortenString(attachItemName(dir.extension))}`
+        }">${
+      dir.isFolder ? 'File folder' : `${attachItemName(dir.extension)}`
+    }</td>
         <td>${
           Number.isInteger(dir.size)
             ? convertSize(Number.parseInt(dir.size, 10))
