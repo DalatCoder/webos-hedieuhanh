@@ -1,9 +1,14 @@
 import attachFileIcon from '../utils/attachFileIcon';
 import shortenString from '../utils/shortenString';
+<<<<<<< HEAD
 import attachItemName from '../utils/attachItemName';
+=======
+import convertSize from '../utils/convertSize';
+>>>>>>> b7e9e542d0efb604e6bbace55406142b4a9e8f2b
 
 function renderListView(
   directories,
+  currentPath,
   parentPath,
   onItemClick,
   onItemDoubleClick,
@@ -30,17 +35,19 @@ function renderListView(
   const tbody = document.createElement('tbody');
 
   // Back folder
-  const trBack = document.createElement('tr');
-  trBack.innerHTML = `
+  if (currentPath !== '/') {
+    const trBack = document.createElement('tr');
+    trBack.innerHTML = `
         <td title="Go back to parent directory"><span><i class="fas fa-folder"></i></span> ..Go back</td>
         <td></td>
         <td></td>
         <td></td>  
   `;
-  trBack.addEventListener('click', () => {
-    onBackClick(parentPath);
-  });
-  tbody.appendChild(trBack);
+    trBack.addEventListener('click', () => {
+      onBackClick(parentPath);
+    });
+    tbody.appendChild(trBack);
+  }
 
   for (let i = 0; i < directories.length; i += 1) {
     const dir = directories[i];
@@ -62,10 +69,19 @@ function renderListView(
           <span>${shortenString(dir.name)}</span>
         </td>
         <td>${date} at ${time}</td>
+<<<<<<< HEAD
         <td>${
           dir.isFolder ? 'File folder' : `${attachItemName(dir.extension)}`
         }</td>
         <td>${Number.isInteger(dir.size) ? `${dir.size} B` : ''}</td>
+=======
+        <td>${dir.isFolder ? 'Folder' : 'File'}</td>
+        <td>${
+          Number.isInteger(dir.size)
+            ? convertSize(Number.parseInt(dir.size, 10))
+            : ''
+        }</td>
+>>>>>>> b7e9e542d0efb604e6bbace55406142b4a9e8f2b
     `;
 
     tr.innerHTML = html;
