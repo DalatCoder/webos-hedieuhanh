@@ -15,6 +15,12 @@ export default function renderNavigation(
 ) {
   const navigationElement = document.getElementById('navigation');
 
+  // Hide navigation bar on root folder
+  if (items.length === 1) {
+    navigationElement.innerHTML = '&nbsp;';
+    return;
+  }
+
   const naviagtionListElement = document.createElement('ul');
   naviagtionListElement.classList.add('navigation-list');
 
