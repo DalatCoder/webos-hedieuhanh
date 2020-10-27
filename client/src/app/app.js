@@ -43,12 +43,9 @@ async function handleOnNavigationItemClick(item) {
 
   renderListView(
     state.directories,
-    state.currentPath,
-    state.parentPath,
     handleOnItemClick,
     handleOnItemDoubleClick,
     handleOnContextMenuOpen,
-    handleOnBackClick,
   );
 
   // Only root in navigation list
@@ -64,7 +61,11 @@ async function handleOnNavigationItemClick(item) {
     );
   else state.navigationItems = state.navigationItems.slice(0, 1);
 
-  renderNavigation(state.navigationItems, handleOnNavigationItemClick);
+  renderNavigation(
+    state.navigationItems,
+    handleOnBackDirectoryClick,
+    handleOnNavigationItemClick,
+  );
 }
 
 function handleOnItemClick(directory) {
@@ -77,12 +78,9 @@ function handleOnItemClick(directory) {
 
   renderListView(
     state.directories,
-    state.currentPath,
-    state.parentPath,
     handleOnItemClick,
     handleOnItemDoubleClick,
     handleOnContextMenuOpen,
-    handleOnBackClick,
   );
 }
 
@@ -100,38 +98,40 @@ async function handleOnItemDoubleClick(item) {
     state.parentPath = response.data.parentPath;
     state.navigationItems.push(item);
 
-    renderNavigation(state.navigationItems, handleOnNavigationItemClick);
+    renderNavigation(
+      state.navigationItems,
+      handleOnBackDirectoryClick,
+      handleOnNavigationItemClick,
+    );
 
     renderListView(
       state.directories,
-      state.currentPath,
-      state.parentPath,
       handleOnItemClick,
       handleOnItemDoubleClick,
       handleOnContextMenuOpen,
-      handleOnBackClick,
     );
   }
 }
 
-async function handleOnBackClick(parentPath) {
-  const response = await fetchDirectory(parentPath);
+async function handleOnBackDirectoryClick() {
+  const response = await fetchDirectory(state.parentPath);
   if (!response.data) return alert(`ERROR! ${response.message}`);
   state.directories = response.data.items;
   state.currentPath = response.data.currentPath;
   state.parentPath = response.data.parentPath;
   if (state.navigationItems.length > 1) state.navigationItems.pop();
 
-  renderNavigation(state.navigationItems, handleOnNavigationItemClick);
+  renderNavigation(
+    state.navigationItems,
+    handleOnBackDirectoryClick,
+    handleOnNavigationItemClick,
+  );
 
   renderListView(
     state.directories,
-    state.currentPath,
-    state.parentPath,
     handleOnItemClick,
     handleOnItemDoubleClick,
     handleOnContextMenuOpen,
-    handleOnBackClick,
   );
 }
 
@@ -149,12 +149,9 @@ function handleOnNewFolderSelect() {
 
     renderListView(
       state.directories,
-      state.currentPath,
-      parentPath,
       handleOnItemClick,
       handleOnItemDoubleClick,
       handleOnContextMenuOpen,
-      handleOnBackClick,
     );
   });
 }
@@ -176,12 +173,9 @@ function handleOnNewFileSelect() {
 
     renderListView(
       state.directories,
-      state.currentPath,
-      parentPath,
       handleOnItemClick,
       handleOnItemDoubleClick,
       handleOnContextMenuOpen,
-      handleOnBackClick,
     );
   });
 }
@@ -209,12 +203,9 @@ function handleOnRenameSelect(selectedItem) {
 
     renderListView(
       state.directories,
-      state.currentPath,
-      parentPath,
       handleOnItemClick,
       handleOnItemDoubleClick,
       handleOnContextMenuOpen,
-      handleOnBackClick,
     );
   });
 }
@@ -237,12 +228,9 @@ function handleOnDeleteSelect(selectedItem) {
 
     renderListView(
       state.directories,
-      state.currentPath,
-      parentPath,
       handleOnItemClick,
       handleOnItemDoubleClick,
       handleOnContextMenuOpen,
-      handleOnBackClick,
     );
   });
 }
@@ -280,12 +268,9 @@ async function handleOnPasteSelect(currentPath) {
 
   renderListView(
     state.directories,
-    state.currentPath,
-    state.parentPath,
     handleOnItemClick,
     handleOnItemDoubleClick,
     handleOnContextMenuOpen,
-    handleOnBackClick,
   );
 
   state.elcontaine = null;
@@ -319,12 +304,9 @@ function handleOnTreeViewItemClick(directories, currentPath, parentPath) {
 
     renderListView(
       state.directories,
-      state.currentPath,
-      state.parentPath,
       handleOnItemClick,
       handleOnItemDoubleClick,
       handleOnContextMenuOpen,
-      handleOnBackClick,
     );
   }
 }
@@ -340,15 +322,16 @@ async function main() {
   state.navigationItems = [{ name: 'Root', path: '/' }];
 
   renderTreeView(state.directories, handleOnTreeViewItemClick);
-  renderNavigation(state.navigationItems, handleOnNavigationItemClick);
+  renderNavigation(
+    state.navigationItems,
+    handleOnBackDirectoryClick,
+    handleOnNavigationItemClick,
+  );
   renderListView(
     state.directories,
-    state.currentPath,
-    state.parentPath,
     handleOnItemClick,
     handleOnItemDoubleClick,
     handleOnContextMenuOpen,
-    handleOnBackClick,
   );
 
   return state;
