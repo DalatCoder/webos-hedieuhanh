@@ -39,6 +39,7 @@ function handleOnItemClick(directory) {
 
   renderListView(
     state.directories,
+    state.currentPath,
     state.parentPath,
     handleOnItemClick,
     handleOnItemDoubleClick,
@@ -62,6 +63,7 @@ async function handleOnItemDoubleClick(item) {
 
     renderListView(
       state.directories,
+      state.currentPath,
       state.parentPath,
       handleOnItemClick,
       handleOnItemDoubleClick,
@@ -80,6 +82,7 @@ async function handleOnBackClick(parentPath) {
 
   renderListView(
     state.directories,
+    state.currentPath,
     state.parentPath,
     handleOnItemClick,
     handleOnItemDoubleClick,
@@ -102,6 +105,7 @@ function handleOnNewFolderSelect() {
 
     renderListView(
       state.directories,
+      state.currentPath,
       parentPath,
       handleOnItemClick,
       handleOnItemDoubleClick,
@@ -128,6 +132,7 @@ function handleOnNewFileSelect() {
 
     renderListView(
       state.directories,
+      state.currentPath,
       parentPath,
       handleOnItemClick,
       handleOnItemDoubleClick,
@@ -160,6 +165,7 @@ function handleOnRenameSelect(selectedItem) {
 
     renderListView(
       state.directories,
+      state.currentPath,
       parentPath,
       handleOnItemClick,
       handleOnItemDoubleClick,
@@ -187,6 +193,7 @@ function handleOnDeleteSelect(selectedItem) {
 
     renderListView(
       state.directories,
+      state.currentPath,
       parentPath,
       handleOnItemClick,
       handleOnItemDoubleClick,
@@ -229,6 +236,7 @@ async function handleOnPasteSelect(currentPath) {
 
   renderListView(
     state.directories,
+    state.currentPath,
     state.parentPath,
     handleOnItemClick,
     handleOnItemDoubleClick,
@@ -267,6 +275,7 @@ function handleOnTreeViewItemClick(directories, currentPath, parentPath) {
 
     renderListView(
       state.directories,
+      state.currentPath,
       state.parentPath,
       handleOnItemClick,
       handleOnItemDoubleClick,
@@ -288,6 +297,7 @@ async function main() {
   renderTreeView(state.directories, handleOnTreeViewItemClick);
   renderListView(
     state.directories,
+    state.currentPath,
     state.parentPath,
     handleOnItemClick,
     handleOnItemDoubleClick,

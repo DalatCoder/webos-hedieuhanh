@@ -4,6 +4,7 @@ import convertSize from '../utils/convertSize';
 
 function renderListView(
   directories,
+  currentPath,
   parentPath,
   onItemClick,
   onItemDoubleClick,
@@ -30,17 +31,19 @@ function renderListView(
   const tbody = document.createElement('tbody');
 
   // Back folder
-  const trBack = document.createElement('tr');
-  trBack.innerHTML = `
+  if (currentPath !== '/') {
+    const trBack = document.createElement('tr');
+    trBack.innerHTML = `
         <td title="Go back to parent directory"><span><i class="fas fa-folder"></i></span> ..Go back</td>
         <td></td>
         <td></td>
         <td></td>  
   `;
-  trBack.addEventListener('click', () => {
-    onBackClick(parentPath);
-  });
-  tbody.appendChild(trBack);
+    trBack.addEventListener('click', () => {
+      onBackClick(parentPath);
+    });
+    tbody.appendChild(trBack);
+  }
 
   for (let i = 0; i < directories.length; i += 1) {
     const dir = directories[i];
