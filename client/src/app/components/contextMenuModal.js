@@ -45,7 +45,7 @@ function renderContextMenu(
 
   if (elcontaine) {
     const pasteAction = createContextMenuAction('Paste');
-    pasteAction.addEventListener('click', function () {
+    pasteAction.addEventListener('click', () => {
       contextMenu.hidden = true;
       onPasteSelect(currentPath);
     });
@@ -54,14 +54,14 @@ function renderContextMenu(
 
   if (selectedItem) {
     const copyAction = createContextMenuAction('Copy');
-    copyAction.addEventListener('click', function () {
+    copyAction.addEventListener('click', () => {
       contextMenu.hidden = true;
       onCopySelect(selectedItem);
     });
     actionListEl.appendChild(copyAction);
 
     const cutAction = createContextMenuAction('Cut');
-    cutAction.addEventListener('click', function () {
+    cutAction.addEventListener('click', () => {
       contextMenu.hidden = true;
       onCutSelect(selectedItem);
     });
