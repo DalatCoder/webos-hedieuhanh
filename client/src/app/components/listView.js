@@ -1,5 +1,6 @@
 import attachFileIcon from '../utils/attachFileIcon';
 import shortenString from '../utils/shortenString';
+import attachItemName from '../utils/attachItemName';
 import convertSize from '../utils/convertSize';
 
 function renderListView(
@@ -15,10 +16,10 @@ function renderListView(
   listView.innerHTML = '';
 
   const table = document.createElement('table');
-  table.classList.add('table', 'table-striped', 'table-hover', 'table-sm');
+  table.classList.add('table', 'table-hover', 'table-sm');
 
   const thead = document.createElement('thead');
-  thead.classList.add('thead-dark');
+  thead.classList.add('thead-pink');
   thead.innerHTML = `
     <tr>
       <th>Name</th>
@@ -65,7 +66,9 @@ function renderListView(
           <span>${shortenString(dir.name)}</span>
         </td>
         <td>${date} at ${time}</td>
-        <td>${dir.isFolder ? 'Folder' : 'File'}</td>
+        <td>${
+          dir.isFolder ? 'File folder' : `${attachItemName(dir.extension)}`
+        }</td>
         <td>${
           Number.isInteger(dir.size)
             ? convertSize(Number.parseInt(dir.size, 10))
