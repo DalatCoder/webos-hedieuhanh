@@ -13,6 +13,7 @@ import deleteFile from './api/deleteFile';
 import deleteDirectory from './api/deleteDirectory';
 import renderTreeView from './components/treeView';
 import renderListView from './components/listView';
+import renderNavigation from './components/navigation';
 import renderEditFileModal from './components/editFileModal';
 import renderContextMenu from './components/contextMenuModal';
 import renderNewFolderModal from './components/newFolderModal';
@@ -22,12 +23,49 @@ import renderDeleteModal from './components/deleteModal';
 
 const state = {
   directories: [],
+  navigationItems: [],
   currentPath: '',
   parentPath: '',
   elcontaine: null,
   user_copy_file: false,
   user_cut_file: false,
 };
+
+async function handleOnNavigationItemClick(item) {
+  let url = '/';
+  if (item.name !== 'Root') url = PATH.join(item.path, item.name);
+
+  const response = await fetchDirectory(url);
+  if (!response.data) return alert(`ERROR! ${response.message}`);
+  state.directories = response.data.items;
+  state.currentPath = response.data.currentPath;
+  state.parentPath = response.data.parentPath;
+
+  renderListView(
+    state.directories,
+    state.currentPath,
+    state.parentPath,
+    handleOnItemClick,
+    handleOnItemDoubleClick,
+    handleOnContextMenuOpen,
+    handleOnBackClick,
+  );
+
+  // Only root in navigation list
+  if (state.navigationItems.length === 1) return;
+
+  const selectedItemIndex = state.navigationItems.findIndex(
+    (d) => d.id === item.id,
+  );
+  if (selectedItemIndex > 0)
+    state.navigationItems = state.navigationItems.slice(
+      0,
+      selectedItemIndex + 1,
+    );
+  else state.navigationItems = state.navigationItems.slice(0, 1);
+
+  renderNavigation(state.navigationItems, handleOnNavigationItemClick);
+}
 
 function handleOnItemClick(directory) {
   state.directories = state.directories.map((dir) => {
@@ -60,6 +98,9 @@ async function handleOnItemDoubleClick(item) {
     state.directories = response.data.items;
     state.currentPath = response.data.currentPath;
     state.parentPath = response.data.parentPath;
+    state.navigationItems.push(item);
+
+    renderNavigation(state.navigationItems, handleOnNavigationItemClick);
 
     renderListView(
       state.directories,
@@ -79,6 +120,9 @@ async function handleOnBackClick(parentPath) {
   state.directories = response.data.items;
   state.currentPath = response.data.currentPath;
   state.parentPath = response.data.parentPath;
+  if (state.navigationItems.length > 1) state.navigationItems.pop();
+
+  renderNavigation(state.navigationItems, handleOnNavigationItemClick);
 
   renderListView(
     state.directories,
@@ -293,8 +337,10 @@ async function main() {
   state.directories = response.data.items;
   state.currentPath = response.data.currentPath;
   state.parentPath = response.data.parentPath;
+  state.navigationItems = [{ name: 'Root', path: '/' }];
 
   renderTreeView(state.directories, handleOnTreeViewItemClick);
+  renderNavigation(state.navigationItems, handleOnNavigationItemClick);
   renderListView(
     state.directories,
     state.currentPath,
