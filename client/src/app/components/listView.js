@@ -69,19 +69,14 @@ function renderListView(
           <span>${shortenString(dir.name)}</span>
         </td>
         <td>${date} at ${time}</td>
-<<<<<<< HEAD
         <td>${
           dir.isFolder ? 'File folder' : `${attachItemName(dir.extension)}`
         }</td>
-        <td>${Number.isInteger(dir.size) ? `${dir.size} B` : ''}</td>
-=======
-        <td>${dir.isFolder ? 'Folder' : 'File'}</td>
         <td>${
           Number.isInteger(dir.size)
             ? convertSize(Number.parseInt(dir.size, 10))
             : ''
         }</td>
->>>>>>> b7e9e542d0efb604e6bbace55406142b4a9e8f2b
     `;
 
     tr.innerHTML = html;
