@@ -1,5 +1,6 @@
 import attachFileIcon from '../utils/attachFileIcon';
 import shortenString from '../utils/shortenString';
+import convertSize from '../utils/convertSize';
 
 function renderListView(
   directories,
@@ -62,7 +63,11 @@ function renderListView(
         </td>
         <td>${date} at ${time}</td>
         <td>${dir.isFolder ? 'Folder' : 'File'}</td>
-        <td>${Number.isInteger(dir.size) ? `${dir.size} B` : ''}</td>
+        <td>${
+          Number.isInteger(dir.size)
+            ? convertSize(Number.parseInt(dir.size, 10))
+            : ''
+        }</td>
     `;
 
     tr.innerHTML = html;
