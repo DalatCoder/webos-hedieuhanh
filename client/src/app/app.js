@@ -21,6 +21,8 @@ import renderNewFileModal from './components/newFileModal';
 import renderRenameModal from './components/renameModal';
 import renderDeleteModal from './components/deleteModal';
 
+//Nguyễn Thị Hà tóc mái ngố dễ thương :3
+
 const state = {
   directories: [],
   navigationItems: [],
