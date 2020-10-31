@@ -28,8 +28,11 @@
     transition: all 300ms ease;
 
     &.selected {
-      background-color: rgb(252, 133, 152);
+      background-color: rgb(103, 103, 236);
       color: white;
+    }
+    &:hover {
+      background-color: rgb(161, 161, 245);
     }
   }
 
