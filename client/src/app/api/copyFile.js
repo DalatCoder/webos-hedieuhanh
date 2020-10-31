@@ -12,7 +12,7 @@ const copyFile = (src, dest, name) => {
   };
 
   return new Promise((resolve) => {
-    fetch('/api/file/copy', requestOptions)
+    fetch('http://localhost:4000/api/file/copy', requestOptions)
       .then((response) => response.json())
       .then((result) => resolve(result))
       .catch((err) => {

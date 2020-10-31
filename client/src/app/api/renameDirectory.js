@@ -12,7 +12,7 @@ const renameDirectory = (path, name, newName) => {
   };
 
   return new Promise((resolve) => {
-    fetch('/api/directory', requestOptions)
+    fetch('http://localhost:4000/api/directory', requestOptions)
       .then((response) => response.json())
       .then((result) => resolve(result))
       .catch((err) => {

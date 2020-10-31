@@ -10,7 +10,10 @@ const fetchFileContent = (path, name) => {
 
   /* eslint-disable */
   return new Promise((resolve, reject) => {
-    fetch(`/api/file/content?path=${path}&name=${name}`, requestOptions)
+    fetch(
+      `http://localhost:4000/api/file/content?path=${path}&name=${name}`,
+      requestOptions,
+    )
       .then((response) => response.json())
       .then((result) => resolve(result))
       .catch((err) => {

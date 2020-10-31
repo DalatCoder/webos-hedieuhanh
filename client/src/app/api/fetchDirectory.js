@@ -9,7 +9,7 @@ const fetchDirectory = (path) => {
   };
 
   return new Promise((resolve) => {
-    fetch(`/api/directory?path=${path}`, requestOptions)
+    fetch(`http://localhost:4000/api/directory?path=${path}`, requestOptions)
       .then((raw) => raw.json())
       .then((response) => {
         const res = { ...response };
