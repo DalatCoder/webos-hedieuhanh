@@ -12,7 +12,7 @@ const cutDirectory = (src, dest, name) => {
   };
 
   return new Promise((resolve) => {
-    fetch('http://localhost:4000/api/directory/cut', requestOptions)
+    fetch('/api/directory/cut', requestOptions)
       .then((response) => response.json())
       .then((result) => resolve(result))
       .catch((err) => {

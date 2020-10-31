@@ -12,7 +12,7 @@ const renameFile = (path, name, newName) => {
   };
 
   return new Promise((resolve) => {
-    fetch('http://localhost:4000/api/file', requestOptions)
+    fetch('/api/file', requestOptions)
       .then((response) => response.json())
       .then((result) => resolve(result))
       .catch((err) => {

@@ -13,7 +13,7 @@ function updateFileContent(path, name, content) {
 
   /* eslint-disable */
   return new Promise((resolve, reject) => {
-    fetch('http://localhost:4000/api/file/content', requestOptions)
+    fetch('/api/file/content', requestOptions)
       .then((response) => response.json())
       .then((result) => resolve(result))
       .catch((err) => {

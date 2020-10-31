@@ -12,7 +12,7 @@ const copyDirectory = (src, dest, name) => {
   };
 
   return new Promise((resolve) => {
-    fetch('http://localhost:4000/api/directory/copy', requestOptions)
+    fetch('/api/directory/copy', requestOptions)
       .then((response) => response.json())
       .then((result) => resolve(result))
       .catch((err) => {

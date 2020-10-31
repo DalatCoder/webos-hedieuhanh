@@ -12,7 +12,7 @@ const cutFile = (src, dest, name) => {
   };
 
   return new Promise((resolve) => {
-    fetch('http://localhost:4000/api/file/cut', requestOptions)
+    fetch('/api/file/cut', requestOptions)
       .then((response) => response.json())
       .then((result) => resolve(result))
       .catch((err) => {
