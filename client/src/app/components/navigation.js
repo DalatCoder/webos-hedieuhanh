@@ -31,7 +31,7 @@ export default function renderNavigation(
 
   const backElement = document.createElement('li');
   backElement.innerHTML = '<i class="fas fa-arrow-circle-left"></i>';
-  backElement.classList.add('navigation-item');
+  backElement.classList.add('navigation-item--back');
   backElement.addEventListener('click', () => {
     onBackDirectoryClick();
   });
