@@ -1,8 +1,7 @@
 #table {
-  height: 87vh;
-  max-height: 87vh;
   overflow: scroll;
   font-family: 'Playfair Display', serif;
+  flex: 1;
 
   .fa-folder,
   [class*='file'] {

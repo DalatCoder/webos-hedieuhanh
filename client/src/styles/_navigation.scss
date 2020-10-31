@@ -3,8 +3,13 @@
   font-size: 17px;
   font-family: 'Sansita Swashed', cursive;
   color: rgb(252, 133, 152);
+  flex-basis: 50px;
+
+  display: flex;
+  align-items: center;
 
   &-list {
+    margin: 0;
     list-style: none;
     display: flex;
     padding: 0;
@@ -17,12 +22,12 @@
     transition: all 300ms;
 
     &:not(:last-child) {
-      margin-right: 15px;
+      margin-right: 10px;
 
       &::after {
         content: '>';
         display: inline-block;
-        margin-left: 15px;
+        margin-left: 17px;
       }
     }
 
@@ -34,8 +39,10 @@
     }
 
     &--back {
-      margin: 5px 20px 5px 5px;
-      font-size: 17px;
+      margin-left: 5px;
+      margin-right: 20px;
+      padding: 5px;
+      backface-visibility: hidden;
       transition: all 300ms;
       cursor: pointer;
 

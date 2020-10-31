@@ -13,7 +13,7 @@ function renderListView(
   listView.innerHTML = '';
 
   const table = document.createElement('table');
-  table.classList.add('table', 'table-hover', 'table-sm');
+  table.classList.add('table', 'table-hover', 'table-sm', 'table-borderless');
 
   const thead = document.createElement('thead');
   thead.classList.add('thead-pink');
