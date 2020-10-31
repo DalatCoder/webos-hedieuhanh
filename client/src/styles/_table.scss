@@ -83,12 +83,14 @@
   }
 
   &::-webkit-scrollbar-track {
+    box-shadow: inset 0 0 10px pink;
     -webkit-box-shadow: inset 0 0 10px pink;
     border-radius: 10px;
   }
 
   &::-webkit-scrollbar-thumb {
     border-radius: 10px;
+    box-shadow: inset 0 0 10px rgb(248, 124, 145);
     -webkit-box-shadow: inset 0 0 10px rgb(248, 124, 145);
   }
 }
