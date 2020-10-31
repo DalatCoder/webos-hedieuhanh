@@ -111,6 +111,10 @@ function renderContextMenu(
   contextMenu.innerHTML = '';
   contextMenu.appendChild(actionListEl);
   contextMenu.hidden = false;
+
+  contextMenu.addEventListener('click', function () {
+    contextMenu.hidden = true;
+  });
 }
 
 export default renderContextMenu;
