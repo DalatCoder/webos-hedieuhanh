@@ -6,9 +6,7 @@
 
   .fa-folder,
   [class*='file'] {
-    font-size: 20px;
-    color: #333;
-    margin-right: 5px;
+    margin-right: 15px;
   }
 
   .fas.fa-folder {
@@ -19,48 +17,6 @@
     background-color: pink;
     color: white;
     font-family: 'Sansita Swashed', cursive;
-  }
-
-  .fas.fa-file-word {
-    color: rgb(43, 146, 194);
-  }
-  .fas.fa-file-powerpoint {
-    color: orangered;
-  }
-
-  .fas.fa-file-excel {
-    color: green;
-  }
-
-  .fas.fa-file-pdf {
-    color: rgb(255, 174, 0);
-  }
-
-  .fas.fa-file-alt {
-    color: blue;
-  }
-  .fas.fa-file {
-    color: rgba(247, 0, 255, 0.616);
-  }
-
-  .fas.fa-file-code {
-    color: rgb(181, 196, 191);
-  }
-
-  .fas.fa-file-archive {
-    color: deeppink;
-  }
-
-  .fas.fa-file-image {
-    color: rgb(105, 105, 231);
-  }
-
-  .fas.fa-file-video {
-    color: rgb(117, 212, 117);
-  }
-
-  .fas.fa-file-audio {
-    color: rebeccapurple;
   }
 
   th,

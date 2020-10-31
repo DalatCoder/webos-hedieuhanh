@@ -1,3 +1,6 @@
+$primary: pink;
+$danger: red;
+
 @import '~bootstrap/scss/bootstrap';
 
 @import './fancyTree';
@@ -11,3 +14,4 @@
 @import './deleteModal';
 @import './editFileModal';
 @import './base';
+@import './colorIcon';

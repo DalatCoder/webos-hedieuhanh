@@ -1,4 +1,6 @@
 .modal {
+  font-family: 'Sansita Swashed', cursive;
+
   position: fixed;
   top: 0;
   left: 0;
@@ -12,5 +14,12 @@
 
   & > :first-child {
     box-shadow: 2px 10px 10px -5px rgba(0, 0, 0, 0.5);
+  }
+
+  cursor: pointer;
+
+  .detail-panel-item:hover {
+    color: rgb(233, 143, 158);
+    background-color: white;
   }
 }

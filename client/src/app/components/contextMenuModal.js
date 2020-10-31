@@ -3,6 +3,7 @@ import attachContextMenuIcon from '../utils/attachContextMenuIcon';
 function createContextMenuAction(action) {
   const li = document.createElement('li');
   li.classList.add('detail-panel-item');
+
   li.innerHTML = `
       <span><i class="${attachContextMenuIcon(
         action.toLowerCase(),
