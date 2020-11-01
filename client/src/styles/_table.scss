@@ -1,3 +1,8 @@
+.empty#table::-webkit-scrollbar {
+  width: 0px;
+  height: 0px;
+}
+
 #table {
   overflow: scroll;
   font-family: 'Playfair Display', serif;

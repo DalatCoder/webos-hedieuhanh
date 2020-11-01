@@ -19,6 +19,7 @@ function renderEmpty() {
     justify-content: center;
     align-items: center;    
     text-align: center;
+    border-top: 1px solid pink;
   `;
 
   wrapper.setAttribute('style', style);
@@ -37,6 +38,7 @@ function renderListView(
 
   if (directories.length === 0) {
     // Empty directory
+    listView.classList.add('empty');
     listView.appendChild(renderEmpty());
     return;
   }
