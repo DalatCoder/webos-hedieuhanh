@@ -310,6 +310,28 @@ function handleOnTreeViewItemClick(directories, currentPath, parentPath) {
       handleOnItemDoubleClick,
       handleOnContextMenuOpen,
     );
+
+    // Set and render navigation items
+    if (currentPath === '/') return;
+
+    const parts = currentPath.split('/');
+    const newNavigationItems = [state.navigationItems[0]];
+
+    for (let i = 1; i < parts.length; i++) {
+      const navigationObject = {
+        name: parts[i],
+        path: parts.slice(0, i + 1).join('/'),
+      };
+      newNavigationItems.push(navigationObject);
+    }
+
+    state.navigationItems = newNavigationItems;
+
+    renderNavigation(
+      state.navigationItems,
+      handleOnBackDirectoryClick,
+      handleOnNavigationItemClick,
+    );
   }
 }
 
