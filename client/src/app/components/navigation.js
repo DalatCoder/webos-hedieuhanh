@@ -23,7 +23,7 @@ export default function renderNavigation(
   }
 
   if (items.length > 5) {
-    items = [items[0], ...items.slice(5, items.length)];
+    items = [items[0], ...items.slice(items.length - 4, items.length)];
   }
 
   const naviagtionListElement = document.createElement('ul');

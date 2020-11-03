@@ -4,7 +4,7 @@ import PATH from 'path';
 
 import $ from 'jquery';
 
-import 'jquery.fancytree/dist/skin-win8/ui.fancytree.min.css';
+import 'jquery.fancytree/dist/skin-lion/ui.fancytree.min.css';
 
 import 'jquery.fancytree/dist/modules/jquery.fancytree.edit';
 import 'jquery.fancytree/dist/modules/jquery.fancytree.filter';

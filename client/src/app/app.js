@@ -34,6 +34,8 @@ const state = {
 };
 
 async function handleOnNavigationItemClick(item) {
+  console.log(item);
+
   let url = '/';
   if (item.name !== 'Root') url = PATH.join(item.path, item.name);
 
@@ -54,7 +56,7 @@ async function handleOnNavigationItemClick(item) {
   if (state.navigationItems.length === 1) return;
 
   const selectedItemIndex = state.navigationItems.findIndex(
-    (d) => d.id === item.id,
+    (d) => d.name === item.name && d.path === item.path,
   );
   if (selectedItemIndex > 0)
     state.navigationItems = state.navigationItems.slice(
@@ -309,6 +311,40 @@ function handleOnTreeViewItemClick(directories, currentPath, parentPath) {
       handleOnItemClick,
       handleOnItemDoubleClick,
       handleOnContextMenuOpen,
+    );
+
+    // Set and render navigation items
+    if (currentPath === '/') return;
+
+    const parts = currentPath.split('/');
+    const newNavigationItems = [
+      {
+        name: 'Root',
+        path: '/',
+      },
+    ];
+
+    newNavigationItems.push({
+      name: parts[1],
+      path: '/',
+    });
+
+    if (parts.length > 1) {
+      for (let i = 2; i < parts.length; i++) {
+        const navigationObject = {
+          name: parts[i],
+          path: parts.slice(0, i).join('/'),
+        };
+        newNavigationItems.push(navigationObject);
+      }
+    }
+
+    state.navigationItems = newNavigationItems;
+
+    renderNavigation(
+      state.navigationItems,
+      handleOnBackDirectoryClick,
+      handleOnNavigationItemClick,
     );
   }
 }

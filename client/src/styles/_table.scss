@@ -1,12 +1,16 @@
+.empty#table::-webkit-scrollbar {
+  width: 0px;
+  height: 0px;
+}
+
 #table {
-  height: 87vh;
-  max-height: 87vh;
   overflow: scroll;
   font-family: 'Playfair Display', serif;
+  flex: 1;
 
   .fa-folder,
   [class*='file'] {
-    margin-right: 15px;
+    width: 22px;
   }
 
   .fas.fa-folder {

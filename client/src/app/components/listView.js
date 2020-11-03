@@ -3,6 +3,30 @@ import shortenString from '../utils/shortenString';
 import attachItemName from '../utils/attachItemName';
 import convertSize from '../utils/convertSize';
 
+function renderEmpty() {
+  const wrapper = document.createElement('div');
+  wrapper.innerHTML = `
+    <div>
+      <h1 class="text-primary">Thư mục trống</h1>
+      <p class="lead">Nhấn chuột phải để tạo mới tập tin hoặc thư mục</p>
+    </div>
+  `;
+
+  const style = `
+    width: 100%;
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;    
+    text-align: center;
+    border-top: 1px solid pink;
+  `;
+
+  wrapper.setAttribute('style', style);
+
+  return wrapper;
+}
+
 function renderListView(
   directories,
   onItemClick,
@@ -12,8 +36,15 @@ function renderListView(
   const listView = document.getElementById('table');
   listView.innerHTML = '';
 
+  if (directories.length === 0) {
+    // Empty directory
+    listView.classList.add('empty');
+    listView.appendChild(renderEmpty());
+    return;
+  }
+
   const table = document.createElement('table');
-  table.classList.add('table', 'table-hover', 'table-sm');
+  table.classList.add('table', 'table-hover', 'table-sm', 'table-borderless');
 
   const thead = document.createElement('thead');
   thead.classList.add('thead-pink');

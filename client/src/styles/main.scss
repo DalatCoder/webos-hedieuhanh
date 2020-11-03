@@ -1,5 +1,4 @@
 $primary: pink;
-$danger: red;
 
 @import '~bootstrap/scss/bootstrap';
 
@@ -15,3 +14,4 @@ $danger: red;
 @import './editFileModal';
 @import './base';
 @import './colorIcon';
+@import './panel';
