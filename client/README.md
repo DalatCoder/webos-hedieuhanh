@@ -2,9 +2,9 @@
 
 ## Tác giả:
 
-- CTK42 - 1812751 - Nguyễn Thị Hà
+- CTK42 - 1812751 - Nguyễn Thị Hà 😊
 
-- CTK42 - 1812756 - Nguyễn Trọng Hiếu
+- CTK42 - 1812756 - Nguyễn Trọng Hiếu 😁
 
 ## Tổng quan kiến trúc code
 
