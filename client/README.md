@@ -1,24 +1,46 @@
-# JAVASCRIPT BOILERPLATE
+# Giao diện frontend của đề tài File Explorer
 
-## Features:
+## Tác giả:
 
-- SASS
-- Babel
-- Bootstrap 4
-- Prettier + Eslint
-- Webpack
+- CTK42 - 1812751 - Nguyễn Thị Hà
 
-## Use:
+- CTK42 - 1812756 - Nguyễn Trọng Hiếu
 
-- npm run start for development
-- npm run build for production
+## Tổng quan kiến trúc code
 
-## References:
+- CSR (Client Side Rendering): việc hiển thị giao diện người dùng được quyết định bởi Javascript
 
-- https://www.youtube.com/watch?v=3On5Z0gjf4U&list=PLblA84xge2_zwxh3XJqy6UVxS60YdusY8
-- https://www.robinwieruch.de
+- Quy trình: 
+  
+  - B1: JS gọi AJAX đến end point tương ứng ở server
+  
+  - B2: Server phản hồi JSON
+  
+  - B3: JS parse JSON phản hồi và tạo các thành phần tương ứng (Gồm HTML + chèn các class để định kiểu)
+  
+  - B4: Chèn thành phần vừa tạo vào DOM để hiển thị
 
-## Notes:
+- Đây là 1 ứng dụng web, người dùng tương tác trực tiếp, giao diện tự động hiển thị tương ứng với thao tác, người dùng không cần phải reload lại trang web để thấy sự thay đổi
 
-- npx install-peerdeps --dev eslint-config-airbnb
-- npm install node-sass --unsafe-perms
+- Các công nghệ được sử dụng:
+  
+  - Javascript ES6
+  
+  - Thư viện fancy-tree để hiển thị cây thư mục
+  
+  - SASS
+  
+  - Bootstrap
+  
+  - Webpack
+  
+  - Babel
+  
+  - Linter: jslint
+  
+  - Code formater: prettier
+
+## Lưu ý trong trường hợp cài thư viện bị lỗi:
+
+- `npx install-peerdeps --dev eslint-config-airbnb`
+- `npm install node-sass --unsafe-perms`
